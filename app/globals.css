@@ -23,8 +23,7 @@ html, body {
 }
 
 a { color: inherit; }
-
-button { font: inherit; }
+button, input, select { font: inherit; }
 
 .shell {
   width: min(1180px, calc(100% - 32px));
@@ -70,6 +69,12 @@ h1 {
 
 .pageHeader h1 { font-size: clamp(34px, 5vw, 58px); }
 
+.navRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .founding {
   border-left: 3px solid var(--accent);
   display: grid;
@@ -84,7 +89,8 @@ h1 {
 }
 
 .primaryButton,
-.controlButton {
+.controlButton,
+.tinyButton {
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--panel-2);
@@ -102,8 +108,20 @@ h1 {
   font-weight: 800;
 }
 
+.primaryButton.compact {
+  width: 100%;
+  margin-top: 2px;
+}
+
 .controlButton[data-open="true"] {
   border-color: var(--accent);
+}
+
+.tinyButton {
+  min-height: 34px;
+  min-width: 34px;
+  padding: 4px 9px;
+  border-radius: 9px;
 }
 
 .workbench {
@@ -165,14 +183,11 @@ h1 {
   text-align: left;
 }
 
-.mapWrap {
-  overflow-x: auto;
-}
+.mapWrap { overflow-x: auto; }
 
 .sceneMap {
   display: block;
   width: 100%;
-  min-width: 760px;
   height: auto;
 }
 
@@ -190,6 +205,7 @@ h1 {
 
 .mapEdge.contradicts { stroke: var(--danger); stroke-width: 2; }
 .mapEdge.blocks { stroke: var(--warn); stroke-dasharray: 6 5; }
+.mapEdge.reinforces, .mapEdge.updates, .mapEdge.escalates { stroke: var(--accent-2); }
 
 .nodeRect {
   fill: #171c22;
@@ -200,6 +216,7 @@ h1 {
 .nodeRect.Rule, .nodeRect.MetaRule { stroke: #7cc8ff; }
 .nodeRect.Gate { stroke: #ffc56d; }
 .nodeRect.Sanction { stroke: #ff7b7b; }
+.nodeRect.Interpretation { stroke: #cf9cff; }
 
 .nodeLabel {
   font-size: 12px;
@@ -217,10 +234,7 @@ h1 {
   margin-bottom: 4px;
 }
 
-.moves {
-  display: grid;
-  gap: 10px;
-}
+.moves { display: grid; gap: 10px; }
 
 .move {
   display: grid;
@@ -231,11 +245,7 @@ h1 {
   padding-top: 12px;
 }
 
-.move:first-child {
-  border-top: 0;
-  padding-top: 0;
-}
-
+.move:first-child { border-top: 0; padding-top: 0; }
 .move strong { display: block; margin-bottom: 3px; }
 
 .breakpoint {
@@ -246,9 +256,165 @@ h1 {
   border-left: 3px solid var(--accent-2);
 }
 
+.patternMatches {
+  margin-top: 18px;
+  display: grid;
+  gap: 8px;
+}
+
+.patternMatch {
+  display: grid;
+  gap: 3px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.patternMatch span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.sectionIntro {
+  margin-bottom: 16px;
+}
+
+.sectionIntro h2 {
+  margin: 5px 0 4px;
+  font-size: 26px;
+}
+
+.editorGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.editorPanel {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel-2);
+  padding: 14px;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.editorPanel label {
+  display: grid;
+  gap: 5px;
+}
+
+.editorPanel label > span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.editorPanel input,
+.editorPanel select {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #0e1216;
+  color: var(--text);
+  padding: 8px 10px;
+}
+
+.twoCols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.structureList {
+  display: grid;
+  gap: 8px;
+  max-height: 360px;
+  overflow: auto;
+}
+
+.structureRow {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+
+.structureRow div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.structureRow strong { font-size: 12px; }
+.structureRow span { color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
+
+.atlasGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.atlasCard {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.atlasIndex {
+  position: absolute;
+  right: 16px;
+  top: 12px;
+  color: #27303a;
+  font-size: 52px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.atlasCard h2 {
+  margin: 8px 0 10px;
+  font-size: 27px;
+}
+
+.atlasInvariant {
+  position: relative;
+  color: var(--text);
+  line-height: 1.5;
+  max-width: 90%;
+}
+
+.atlasColumns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.atlasColumns ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+  line-height: 1.45;
+  font-size: 13px;
+}
+
+@media (max-width: 900px) {
+  .editorGrid { grid-template-columns: 1fr 1fr; }
+}
+
 @media (max-width: 780px) {
-  .summaryGrid { grid-template-columns: 1fr; }
+  .summaryGrid, .atlasGrid, .editorGrid { grid-template-columns: 1fr; }
   .shell { width: min(100% - 20px, 1180px); padding-top: 26px; }
   .panel { padding: 14px; }
   .move { grid-template-columns: 1fr; }
+  .atlasColumns, .twoCols { grid-template-columns: 1fr; }
 }

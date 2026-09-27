@@ -1,0 +1,28 @@
+{
+  "id": "interpreter-attack",
+  "name": "Interpreter Attack",
+  "topology": {
+    "shift": "structural contradiction is relocated into alleged defect of the decoder"
+  },
+  "activation": [
+    "a participant identifies a mismatch or contradiction",
+    "the validity of perception itself becomes the target"
+  ],
+  "maintenance": [
+    "uncertainty about the decoder replaces examination of the structure",
+    "external interpretation gains authority"
+  ],
+  "signatures": [
+    "you only see a contradiction because something is wrong with you",
+    "disagreement about the frame is treated as evidence of defective interpretation"
+  ],
+  "falsePositives": [
+    "good-faith correction supported by inspectable evidence",
+    "ordinary disagreement over ambiguous facts"
+  ],
+  "breakpoints": [
+    { "level": "B2", "operation": "separate observed data from competing interpretations" },
+    { "level": "B3", "operation": "restore legitimacy of inspectable alternative interpretations" }
+  ],
+  "neighbours": ["double-bind", "recursive-double-bind"]
+}

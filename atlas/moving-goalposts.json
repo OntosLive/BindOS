@@ -1,0 +1,28 @@
+{
+  "id": "moving-goalposts",
+  "name": "Moving Goalposts",
+  "topology": {
+    "update": "criterion fulfilled -> criterion redefined -> obligation remains open"
+  },
+  "activation": [
+    "a criterion is presented as sufficient",
+    "after fulfilment, a meta-rule changes the criterion retroactively"
+  ],
+  "maintenance": [
+    "completion never reaches a terminal state",
+    "new requirements inherit legitimacy from the previous unmet obligation"
+  ],
+  "signatures": [
+    "success does not close the obligation",
+    "the definition of enough changes after performance"
+  ],
+  "falsePositives": [
+    "new requirements caused by genuinely new external conditions",
+    "open-ended work where sufficiency was never promised"
+  ],
+  "breakpoints": [
+    { "level": "B2", "operation": "freeze the criterion before performance" },
+    { "level": "B3", "operation": "forbid retroactive redefinition of sufficiency" }
+  ],
+  "neighbours": ["guilt-compensation-loop", "double-bind"]
+}

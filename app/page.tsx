@@ -15,9 +15,10 @@ export default function HomePage() {
         <strong>пространство допустимых ответов</strong>
       </div>
 
-      <Link className="primaryButton" href="/scene">
-        Открыть сцену
-      </Link>
+      <div className="navRow">
+        <Link className="primaryButton" href="/scene">Открыть сцену</Link>
+        <Link className="controlButton" href="/atlas">Открыть Atlas 0.1</Link>
+      </div>
     </main>
   );
 }

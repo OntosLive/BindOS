@@ -1,0 +1,29 @@
+{
+  "id": "recursive-double-bind",
+  "name": "Recursive Double Bind",
+  "topology": {
+    "base": "double-bind",
+    "recursion": "repair or exit attempt is reframed as new evidence inside the original bind"
+  },
+  "activation": [
+    "a double bind is active",
+    "a repair or exit attempt is fed back into the same rule system"
+  ],
+  "maintenance": [
+    "the system consumes its own attempted correction",
+    "failed repair increases apparent validity of the original frame"
+  ],
+  "signatures": [
+    "naming the bind becomes proof of violation",
+    "leaving becomes evidence of guilt or disloyalty"
+  ],
+  "falsePositives": [
+    "ordinary disagreement about a proposed repair",
+    "a repair attempt that is rejected but does not reinforce the original bind"
+  ],
+  "breakpoints": [
+    { "level": "B3", "operation": "prevent repair attempts from being reclassified under the original rule" },
+    { "level": "B4", "operation": "move repair to a context not governed by the original frame" }
+  ],
+  "neighbours": ["double-bind", "interpreter-attack"]
+}

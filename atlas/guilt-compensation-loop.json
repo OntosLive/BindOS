@@ -1,0 +1,28 @@
+{
+  "id": "guilt-compensation-loop",
+  "name": "Guilt–Compensation Loop",
+  "topology": {
+    "cycle": "accusation or deficit -> guilt -> compensation -> reinforcement of accusation route"
+  },
+  "activation": [
+    "guilt reliably triggers compensatory action",
+    "compensation rewards the signal that generated guilt"
+  ],
+  "maintenance": [
+    "compensation reduces immediate tension",
+    "the guilt-producing route becomes more effective and therefore more likely"
+  ],
+  "signatures": [
+    "obligation expands through repeated guilt-triggered compensation",
+    "resolution of one claim produces new claims rather than closure"
+  ],
+  "falsePositives": [
+    "proportionate restitution after clear harm",
+    "explicit contractual compensation"
+  ],
+  "breakpoints": [
+    { "level": "B2", "operation": "separate verified harm from automatic obligation" },
+    { "level": "B3", "operation": "define a closure rule for compensation" }
+  ],
+  "neighbours": ["rescue-dependency-loop", "moving-goalposts"]
+}

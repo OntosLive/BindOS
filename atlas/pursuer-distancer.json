@@ -1,0 +1,27 @@
+{
+  "id": "pursuer-distancer",
+  "name": "Pursuer–Distancer",
+  "topology": {
+    "cycle": "pursuit -> distance -> stronger pursuit -> stronger distance"
+  },
+  "activation": [
+    "one actor regulates uncertainty by increasing contact",
+    "another regulates pressure by decreasing contact"
+  ],
+  "maintenance": [
+    "each actor's regulation strategy generates the condition feared by the other"
+  ],
+  "signatures": [
+    "more pursuit predicts more withdrawal",
+    "more withdrawal predicts more pursuit"
+  ],
+  "falsePositives": [
+    "one-time need for space",
+    "explicitly negotiated differences in contact frequency"
+  ],
+  "breakpoints": [
+    { "level": "B1", "operation": "decouple regulation from automatic pursuit or withdrawal" },
+    { "level": "B2", "operation": "make contact and autonomy expectations explicit" }
+  ],
+  "neighbours": ["double-bind", "intermittent-reinforcement"]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "rescue-dependency-loop",
+  "name": "Rescue–Dependency Loop",
+  "topology": {
+    "cycle": "deficit -> rescue -> reduced autonomous action -> increased need for rescue"
+  },
+  "activation": [
+    "one actor repeatedly substitutes for another actor's function",
+    "substitution reduces pressure or opportunity for autonomous action"
+  ],
+  "maintenance": [
+    "rescue produces short-term relief",
+    "short-term relief strengthens the same rescue route"
+  ],
+  "signatures": [
+    "help increasingly becomes required for baseline functioning",
+    "withdrawal of help is treated as creation of the deficit rather than exposure of it"
+  ],
+  "falsePositives": [
+    "temporary assistance with a clear handoff",
+    "care where autonomy is impossible or irrelevant"
+  ],
+  "breakpoints": [
+    { "level": "B1", "operation": "replace substitution with bounded support" },
+    { "level": "B2", "operation": "make responsibility and handoff rules explicit" }
+  ],
+  "neighbours": ["guilt-compensation-loop", "triangulation"]
+}
