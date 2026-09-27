@@ -26,7 +26,20 @@ function toggleGate(scene: Scene, gateId: string): Scene {
 }
 
 function gateIsOpen(scene: Scene, id: string) {
-  return scene.nodes.find((node) => node.id === id)?.metadata?.gateStatus === "open";
+  return (
+    scene.nodes.find((node) => node.id === id)?.metadata?.gateStatus === "open"
+  );
+}
+
+function makeEmptyScene(): Scene {
+  return {
+    id: "untitled-scene",
+    title: "Новая сцена",
+    actors: [],
+    nodes: [],
+    edges: [],
+    moves: [],
+  };
 }
 
 const breakpointText = {
@@ -44,6 +57,9 @@ export function SceneWorkbench() {
 
   const metaOpen = gateIsOpen(scene, "meta-gate");
   const exitOpen = gateIsOpen(scene, "exit-gate");
+  const hasCanonicalGates = scene.nodes.some(
+    (node) => node.id === "meta-gate" || node.id === "exit-gate",
+  );
 
   return (
     <section className="workbench">
@@ -54,64 +70,126 @@ export function SceneWorkbench() {
           <p className="muted">{analysis.explanation}</p>
 
           <div className="statusRow">
-            <span className="badge">conflict: {analysis.hasRuleConflict ? "yes" : "no"}</span>
-            <span className="badge">clean L0: {analysis.cleanActionMoves}</span>
-            <span className={`badge ${analysis.metaEscape ? "clean" : "blocked"}`}>meta: {analysis.metaEscape ? "open" : "closed"}</span>
-            <span className={`badge ${analysis.exitEscape ? "clean" : "blocked"}`}>exit: {analysis.exitEscape ? "open" : "closed"}</span>
+            <span className="badge">
+              conflict: {analysis.hasRuleConflict ? "yes" : "no"}
+            </span>
+            <span className="badge">
+              clean L0: {analysis.cleanActionMoves}
+            </span>
+            <span
+              className={`badge ${analysis.metaEscape ? "clean" : "blocked"}`}
+            >
+              meta: {analysis.metaEscape ? "open" : "closed"}
+            </span>
+            <span
+              className={`badge ${analysis.exitEscape ? "clean" : "blocked"}`}
+            >
+              exit: {analysis.exitEscape ? "open" : "closed"}
+            </span>
           </div>
 
           <div className="breakpoint">
             <strong>Lowest breakpoint · {analysis.lowestBreakpoint}</strong>
-            <div className="muted">{breakpointText[analysis.lowestBreakpoint]}</div>
+            <div className="muted">
+              {breakpointText[analysis.lowestBreakpoint]}
+            </div>
           </div>
 
           <div className="patternMatches">
             <div className="eyebrow">Pattern matches</div>
-            {matches.length ? matches.map((match) => (
-              <div className="patternMatch" key={match.id}>
-                <strong>{match.label}</strong>
-                <span>{match.evidence.join(" · ")}</span>
-              </div>
-            )) : <div className="muted">Канонических совпадений пока нет.</div>}
+            {matches.length ? (
+              matches.map((match) => (
+                <div className="patternMatch" key={match.id}>
+                  <strong>{match.label}</strong>
+                  <span>{match.evidence.join(" · ")}</span>
+                </div>
+              ))
+            ) : (
+              <div className="muted">Канонических совпадений пока нет.</div>
+            )}
           </div>
         </div>
 
         <div className="panel controls">
-          <div className="eyebrow">Изменить геометрию</div>
-          <button className="controlButton" data-open={metaOpen} onClick={() => setScene((current) => toggleGate(current, "meta-gate"))} type="button">
-            <span>MetaGate</span>
-            <strong>{metaOpen ? "OPEN" : "CLOSED"}</strong>
-          </button>
-          <button className="controlButton" data-open={exitOpen} onClick={() => setScene((current) => toggleGate(current, "exit-gate"))} type="button">
-            <span>ExitGate</span>
-            <strong>{exitOpen ? "OPEN" : "CLOSED"}</strong>
-          </button>
-          <button className="controlButton" onClick={() => setEditorOpen((value) => !value)} type="button">
-            <span>Редактор сцены</span>
+          <div className="eyebrow">Управление сценой</div>
+          {hasCanonicalGates && (
+            <>
+              <button
+                className="controlButton"
+                data-open={metaOpen}
+                onClick={() =>
+                  setScene((current) => toggleGate(current, "meta-gate"))
+                }
+                type="button"
+              >
+                <span>MetaGate</span>
+                <strong>{metaOpen ? "OPEN" : "CLOSED"}</strong>
+              </button>
+              <button
+                className="controlButton"
+                data-open={exitOpen}
+                onClick={() =>
+                  setScene((current) => toggleGate(current, "exit-gate"))
+                }
+                type="button"
+              >
+                <span>ExitGate</span>
+                <strong>{exitOpen ? "OPEN" : "CLOSED"}</strong>
+              </button>
+            </>
+          )}
+          <button
+            className="controlButton"
+            onClick={() => setEditorOpen((value) => !value)}
+            type="button"
+          >
+            <span>Формы / таблица</span>
             <strong>{editorOpen ? "CLOSE" : "OPEN"}</strong>
           </button>
-          <button className="controlButton" onClick={() => setScene(spontaneousScene)} type="button">
-            <span>Вернуть исходную сцену</span>
-            <strong>RESET</strong>
+          <button
+            className="controlButton"
+            onClick={() => setScene(makeEmptyScene())}
+            type="button"
+          >
+            <span>Пустая сцена</span>
+            <strong>NEW</strong>
+          </button>
+          <button
+            className="controlButton"
+            onClick={() => setScene(spontaneousScene)}
+            type="button"
+          >
+            <span>«Будь спонтанным»</span>
+            <strong>LOAD</strong>
           </button>
         </div>
+      </div>
+
+      <div className="panel topologyPanel">
+        <div className="sectionIntro">
+          <div className="eyebrow">Topology editor</div>
+          <h2>Рисуй саму машину</h2>
+          <p className="muted">
+            Узлы можно таскать между логическими уровнями. В режиме «Связывать»
+            выбери источник и назначение: ребро сразу попадает в kernel.
+          </p>
+        </div>
+        <SceneMap scene={scene} onChange={setScene} />
       </div>
 
       {editorOpen && (
         <div className="panel">
           <div className="sectionIntro">
             <div className="eyebrow">Scene compiler</div>
-            <h2>Собери машину отношений</h2>
-            <p className="muted">Добавляй узлы, связи и ходы. Kernel пересчитывает топологию сразу, без нейросети.</p>
+            <h2>Точная разметка</h2>
+            <p className="muted">
+              Формы остаются вторым входом: ими удобно добавлять санкции, gates
+              и ходы с явными параметрами.
+            </p>
           </div>
           <SceneEditor scene={scene} onChange={setScene} />
         </div>
       )}
-
-      <div className="panel">
-        <div className="eyebrow">Topology</div>
-        <SceneMap scene={scene} />
-      </div>
 
       <div className="panel">
         <div className="eyebrow">Moves</div>
@@ -120,15 +198,25 @@ export function SceneWorkbench() {
             <div className="move" key={item.move.id}>
               <div>
                 <strong>{item.move.label}</strong>
-                <div className="muted">{item.reasons.length ? item.reasons.join(" · ") : "ограничений не найдено"}</div>
+                <div className="muted">
+                  {item.reasons.length
+                    ? item.reasons.join(" · ")
+                    : "ограничений не найдено"}
+                </div>
               </div>
               <span className={`badge ${item.status}`}>
                 {item.status.toUpperCase()}
-                {item.effectiveCost > 0 ? ` · cost ${item.effectiveCost}` : ""}
+                {item.effectiveCost > 0
+                  ? ` · cost ${item.effectiveCost}`
+                  : ""}
               </span>
             </div>
           ))}
-          {!analysis.moves.length && <div className="muted">Добавь хотя бы один ход в редакторе.</div>}
+          {!analysis.moves.length && (
+            <div className="muted">
+              Ходов пока нет. Добавь их через «Формы / таблица».
+            </div>
+          )}
         </div>
       </div>
     </section>
