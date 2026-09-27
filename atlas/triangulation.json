@@ -1,0 +1,49 @@
+{
+  "id": "triangulation",
+  "name": "Triangulation",
+  "topology": {
+    "actors": [
+      "A",
+      "B",
+      "C"
+    ],
+    "relations": [
+      "A-B tension",
+      "A or B routes regulation through C"
+    ]
+  },
+  "activation": [
+    "direct A-B regulation is insufficient or avoided",
+    "a third actor becomes a carrier of tension, alliance, message, or legitimacy"
+  ],
+  "maintenance": [
+    "C temporarily lowers A-B tension",
+    "temporary relief reduces pressure for direct A-B repair"
+  ],
+  "signatures": [
+    "messages or pressure repeatedly travel through a third actor",
+    "C becomes structurally necessary to stabilize A-B"
+  ],
+  "falsePositives": [
+    "legitimate mediation with explicit mandate and exit",
+    "ordinary three-person collaboration"
+  ],
+  "breakpoints": [
+    {
+      "level": "B1",
+      "operation": "restore direct A-B communication where safe and appropriate"
+    },
+    {
+      "level": "B2",
+      "operation": "make the third-party regulatory role explicit"
+    },
+    {
+      "level": "B3",
+      "operation": "change the rule that requires C to stabilize A-B"
+    }
+  ],
+  "neighbours": [
+    "scapegoating",
+    "rescue-dependency-loop"
+  ]
+}

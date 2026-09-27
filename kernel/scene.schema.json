@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BindOS Scene",
+  "type": "object",
+  "required": [
+    "id",
+    "actors",
+    "nodes",
+    "edges"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "actors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "epistemic"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "Event",
+              "Message",
+              "Interpretation",
+              "Rule",
+              "MetaRule",
+              "Gate",
+              "Sanction",
+              "Context",
+              "State"
+            ]
+          },
+          "level": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "epistemic": {
+            "enum": [
+              "observed",
+              "inferred",
+              "suggested"
+            ]
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "from",
+          "to",
+          "type"
+        ],
+        "properties": {
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "sends",
+              "interpretsAs",
+              "requires",
+              "forbids",
+              "sanctions",
+              "permits",
+              "blocks",
+              "dependsOn",
+              "escalates",
+              "reinforces",
+              "contradicts",
+              "reframes",
+              "exitsTo",
+              "updates"
+            ]
+          },
+          "weight": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}

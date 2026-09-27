@@ -1,0 +1,51 @@
+{
+  "id": "double-bind",
+  "name": "Double Bind",
+  "topology": {
+    "rules": [
+      "R1 requires X",
+      "R2 makes X violate another obligation"
+    ],
+    "gates": [
+      "MetaGate closed or sanctioned",
+      "ExitGate closed, costly, or sanctioned"
+    ]
+  },
+  "activation": [
+    "two or more relevant rules conflict",
+    "compliance with one creates violation of another",
+    "violations carry meaningful sanctions",
+    "same-level repair is unavailable"
+  ],
+  "maintenance": [
+    "participant keeps searching for a valid first-order move",
+    "meta-level repair remains unavailable"
+  ],
+  "signatures": [
+    "every salient move violates another active rule",
+    "naming the contradiction is blocked or punished"
+  ],
+  "falsePositives": [
+    "ordinary dilemma with a permitted choice",
+    "temporary ambiguity that can be clarified",
+    "conflict where exit is freely available"
+  ],
+  "breakpoints": [
+    {
+      "level": "B2",
+      "operation": "make the conflicting rules explicit"
+    },
+    {
+      "level": "B3",
+      "operation": "open meta-communication or change a meta-rule"
+    },
+    {
+      "level": "B4",
+      "operation": "change or leave the interaction frame"
+    }
+  ],
+  "neighbours": [
+    "recursive-double-bind",
+    "interpreter-attack"
+  ]
+}

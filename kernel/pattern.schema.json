@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BindOS Pattern",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "topology",
+    "activation",
+    "maintenance",
+    "breakpoints"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "topology": {
+      "type": "object"
+    },
+    "activation": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "maintenance": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "signatures": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "falsePositives": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "breakpoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "level",
+          "operation"
+        ],
+        "properties": {
+          "level": {
+            "enum": [
+              "B0",
+              "B1",
+              "B2",
+              "B3",
+              "B4"
+            ]
+          },
+          "operation": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "neighbours": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
