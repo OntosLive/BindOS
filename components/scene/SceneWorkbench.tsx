@@ -2,7 +2,11 @@
 
 import { useMemo, useState } from "react";
 import { analyzeScene } from "@/lib/bindos/engine";
-import { matchScene } from "@/lib/bindos/matcher";
+import {
+  matchScene,
+  sceneSignature,
+  type PatternMatch,
+} from "@/lib/bindos/matcher";
 import { spontaneousScene } from "@/lib/bindos/sample";
 import type { GateStatus, Scene } from "@/lib/bindos/types";
 import { SceneEditor } from "./SceneEditor";
@@ -52,14 +56,27 @@ const breakpointText = {
 export function SceneWorkbench() {
   const [scene, setScene] = useState<Scene>(spontaneousScene);
   const [editorOpen, setEditorOpen] = useState(false);
+  const [activePatternId, setActivePatternId] = useState<string | null>(null);
+
   const analysis = useMemo(() => analyzeScene(scene), [scene]);
   const matches = useMemo(() => matchScene(scene), [scene]);
+  const signature = useMemo(() => sceneSignature(matches), [matches]);
+
+  const activeMatch: PatternMatch | null =
+    matches.find((match) => match.id === activePatternId) ??
+    matches[0] ??
+    null;
 
   const metaOpen = gateIsOpen(scene, "meta-gate");
   const exitOpen = gateIsOpen(scene, "exit-gate");
   const hasCanonicalGates = scene.nodes.some(
     (node) => node.id === "meta-gate" || node.id === "exit-gate",
   );
+
+  function replaceScene(next: Scene) {
+    setScene(next);
+    setActivePatternId(null);
+  }
 
   return (
     <section className="workbench">
@@ -68,6 +85,11 @@ export function SceneWorkbench() {
           <div className="eyebrow">Kernel output</div>
           <h2 className="analysisTitle">{analysis.label}</h2>
           <p className="muted">{analysis.explanation}</p>
+
+          <div className="signatureBox">
+            <span>Реляционная сигнатура</span>
+            <strong>{signature}</strong>
+          </div>
 
           <div className="statusRow">
             <span className="badge">
@@ -96,18 +118,42 @@ export function SceneWorkbench() {
           </div>
 
           <div className="patternMatches">
-            <div className="eyebrow">Pattern matches</div>
+            <div className="eyebrow">Executable motif matches</div>
             {matches.length ? (
               matches.map((match) => (
-                <div className="patternMatch" key={match.id}>
-                  <strong>{match.label}</strong>
-                  <span>{match.evidence.join(" · ")}</span>
-                </div>
+                <button
+                  type="button"
+                  className={`patternMatchButton ${activeMatch?.id === match.id ? "active" : ""}`}
+                  key={match.id}
+                  onClick={() => setActivePatternId(match.id)}
+                >
+                  <span>
+                    <strong>{match.label}</strong>
+                    <small>{match.family}</small>
+                  </span>
+                  <em>{match.nodeIds.length} nodes · {match.edgeIds.length} edges</em>
+                </button>
               ))
             ) : (
-              <div className="muted">Канонических совпадений пока нет.</div>
+              <div className="muted">Исполняемых мотивов пока не найдено.</div>
             )}
           </div>
+
+          {activeMatch && (
+            <div className="motifInspector">
+              <div className="eyebrow">Selected motif</div>
+              <strong>{activeMatch.label}</strong>
+              <p>{activeMatch.invariant}</p>
+              <details>
+                <summary>Показать структурное доказательство</summary>
+                <ul>
+                  {activeMatch.evidence.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </details>
+            </div>
+          )}
         </div>
 
         <div className="panel controls">
@@ -118,7 +164,7 @@ export function SceneWorkbench() {
                 className="controlButton"
                 data-open={metaOpen}
                 onClick={() =>
-                  setScene((current) => toggleGate(current, "meta-gate"))
+                  replaceScene(toggleGate(scene, "meta-gate"))
                 }
                 type="button"
               >
@@ -129,7 +175,7 @@ export function SceneWorkbench() {
                 className="controlButton"
                 data-open={exitOpen}
                 onClick={() =>
-                  setScene((current) => toggleGate(current, "exit-gate"))
+                  replaceScene(toggleGate(scene, "exit-gate"))
                 }
                 type="button"
               >
@@ -148,7 +194,7 @@ export function SceneWorkbench() {
           </button>
           <button
             className="controlButton"
-            onClick={() => setScene(makeEmptyScene())}
+            onClick={() => replaceScene(makeEmptyScene())}
             type="button"
           >
             <span>Пустая сцена</span>
@@ -156,7 +202,7 @@ export function SceneWorkbench() {
           </button>
           <button
             className="controlButton"
-            onClick={() => setScene(spontaneousScene)}
+            onClick={() => replaceScene(spontaneousScene)}
             type="button"
           >
             <span>«Будь спонтанным»</span>
@@ -168,13 +214,17 @@ export function SceneWorkbench() {
       <div className="panel topologyPanel">
         <div className="sectionIntro">
           <div className="eyebrow">Topology editor</div>
-          <h2>Рисуй саму машину</h2>
+          <h2>Машина внутри сцены</h2>
           <p className="muted">
-            Узлы можно таскать между логическими уровнями. В режиме «Связывать»
-            выбери источник и назначение: ребро сразу попадает в kernel.
+            Найденный мотив подсвечивается прямо в графе. Это уже не ярлык:
+            matcher показывает конкретный подграф, который образует структуру.
           </p>
         </div>
-        <SceneMap scene={scene} onChange={setScene} />
+        <SceneMap
+          scene={scene}
+          onChange={replaceScene}
+          activeMatch={activeMatch}
+        />
       </div>
 
       {editorOpen && (
@@ -183,11 +233,11 @@ export function SceneWorkbench() {
             <div className="eyebrow">Scene compiler</div>
             <h2>Точная разметка</h2>
             <p className="muted">
-              Формы остаются вторым входом: ими удобно добавлять санкции, gates
-              и ходы с явными параметрами.
+              Формы остаются вторым входом для санкций, gates и ходов с
+              явными параметрами.
             </p>
           </div>
-          <SceneEditor scene={scene} onChange={setScene} />
+          <SceneEditor scene={scene} onChange={replaceScene} />
         </div>
       )}
 

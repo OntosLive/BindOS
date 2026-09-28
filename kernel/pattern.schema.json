@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "BindOS Pattern",
+  "title": "BindOS Executable Pattern",
   "type": "object",
   "required": [
     "id",
@@ -11,68 +11,106 @@
     "breakpoints"
   ],
   "properties": {
-    "id": {
-      "type": "string"
+    "id": { "type": "string" },
+    "name": { "type": "string" },
+    "family": { "type": "string" },
+    "invariant": { "type": "string" },
+    "topology": { "type": "object" },
+    "nodeConstraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["role", "type"],
+        "properties": {
+          "role": { "type": "string" },
+          "type": {
+            "enum": [
+              "Event",
+              "Message",
+              "Interpretation",
+              "Rule",
+              "MetaRule",
+              "Gate",
+              "Sanction",
+              "Context",
+              "State"
+            ]
+          },
+          "gateType": {
+            "enum": ["action", "meta", "exit", "interpretation"]
+          },
+          "gateStatus": {
+            "enum": ["open", "closed", "conditional"]
+          },
+          "interpreterAttack": { "type": "boolean" },
+          "distinctFrom": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
     },
-    "name": {
-      "type": "string"
-    },
-    "topology": {
-      "type": "object"
+    "edgeConstraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "type"],
+        "properties": {
+          "from": { "type": "string" },
+          "to": { "type": "string" },
+          "type": {
+            "enum": [
+              "sends",
+              "interpretsAs",
+              "requires",
+              "forbids",
+              "sanctions",
+              "permits",
+              "blocks",
+              "dependsOn",
+              "escalates",
+              "reinforces",
+              "contradicts",
+              "reframes",
+              "exitsTo",
+              "updates"
+            ]
+          },
+          "optional": { "type": "boolean" },
+          "bidirectional": { "type": "boolean" }
+        }
+      }
     },
     "activation": {
       "type": "array",
-      "items": {
-        "type": "string"
-      }
+      "items": { "type": "string" }
     },
     "maintenance": {
       "type": "array",
-      "items": {
-        "type": "string"
-      }
+      "items": { "type": "string" }
     },
     "signatures": {
       "type": "array",
-      "items": {
-        "type": "string"
-      }
+      "items": { "type": "string" }
     },
     "falsePositives": {
       "type": "array",
-      "items": {
-        "type": "string"
-      }
+      "items": { "type": "string" }
     },
     "breakpoints": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": [
-          "level",
-          "operation"
-        ],
+        "required": ["level", "operation"],
         "properties": {
-          "level": {
-            "enum": [
-              "B0",
-              "B1",
-              "B2",
-              "B3",
-              "B4"
-            ]
-          },
-          "operation": {
-            "type": "string"
-          }
+          "level": { "enum": ["B0", "B1", "B2", "B3", "B4"] },
+          "operation": { "type": "string" }
         }
       }
     },
     "neighbours": {
       "type": "array",
-      "items": {
-        "type": "string"
-      }
+      "items": { "type": "string" }
     }
   }
 }

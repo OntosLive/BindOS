@@ -11,7 +11,13 @@ import {
   removeSceneNode,
   setSceneNodeLevel,
 } from "@/lib/bindos/graph";
-import type { EdgeType, Scene, SceneEdge, SceneNode } from "@/lib/bindos/types";
+import type { PatternMatch } from "@/lib/bindos/matcher";
+import type {
+  EdgeType,
+  Scene,
+  SceneEdge,
+  SceneNode,
+} from "@/lib/bindos/types";
 
 const NODE_W = 210;
 const NODE_H = 72;
@@ -25,13 +31,15 @@ function edgeClass(edge: SceneEdge): string {
 }
 
 function fallbackPosition(scene: Scene, node: SceneNode) {
-  const sameLevel = scene.nodes.filter(
-    (candidate) =>
-      (candidate.level ?? 0) === (node.level ?? 0) && candidate.id !== node.id,
+  const peers = scene.nodes.filter(
+    (candidate) => (candidate.level ?? 0) === (node.level ?? 0),
   );
-  const index = sameLevel.findIndex((candidate) => candidate.id === node.id);
+  const index = Math.max(
+    0,
+    peers.findIndex((candidate) => candidate.id === node.id),
+  );
   return {
-    x: 150 + Math.max(0, index) * 235,
+    x: 150 + index * 235,
     y: GRAPH_LEVEL_Y[node.level ?? 0],
   };
 }
@@ -59,9 +67,11 @@ function canvasWidth(scene: Scene) {
 export function SceneMap({
   scene,
   onChange,
+  activeMatch,
 }: {
   scene: Scene;
   onChange: (scene: Scene) => void;
+  activeMatch?: PatternMatch | null;
 }) {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const dragRef = useRef<{
@@ -78,6 +88,14 @@ export function SceneMap({
   const [selectedEdge, setSelectedEdge] = useState<string | null>(null);
 
   const width = useMemo(() => canvasWidth(scene), [scene]);
+  const motifNodes = useMemo(
+    () => new Set(activeMatch?.nodeIds ?? []),
+    [activeMatch],
+  );
+  const motifEdges = useMemo(
+    () => new Set(activeMatch?.edgeIds ?? []),
+    [activeMatch],
+  );
 
   function clientToSvg(clientX: number, clientY: number) {
     const svg = svgRef.current;
@@ -85,7 +103,9 @@ export function SceneMap({
     const rect = svg.getBoundingClientRect();
     return {
       x: ((clientX - rect.left) / Math.max(1, rect.width)) * width,
-      y: ((clientY - rect.top) / Math.max(1, rect.height)) * CANVAS_HEIGHT,
+      y:
+        ((clientY - rect.top) / Math.max(1, rect.height)) *
+        CANVAS_HEIGHT,
     };
   }
 
@@ -111,20 +131,25 @@ export function SceneMap({
     const drag = dragRef.current;
     if (!drag || mode !== "move") return;
     const point = clientToSvg(event.clientX, event.clientY);
-    const x = point.x - drag.offsetX;
-    const y = point.y - drag.offsetY;
     drag.moved = true;
-    onChange(moveSceneNode(scene, drag.nodeId, x, y));
+    onChange(
+      moveSceneNode(
+        scene,
+        drag.nodeId,
+        point.x - drag.offsetX,
+        point.y - drag.offsetY,
+      ),
+    );
   }
 
   function endDrag() {
     const drag = dragRef.current;
     if (!drag) return;
-
     const node = scene.nodes.find((candidate) => candidate.id === drag.nodeId);
     if (node?.ui && drag.moved) {
-      const level = nearestLogicalLevel(node.ui.y);
-      onChange(setSceneNodeLevel(scene, node.id, level));
+      onChange(
+        setSceneNodeLevel(scene, node.id, nearestLogicalLevel(node.ui.y)),
+      );
     }
     dragRef.current = null;
   }
@@ -132,7 +157,6 @@ export function SceneMap({
   function chooseNode(nodeId: string) {
     setSelectedNode(nodeId);
     setSelectedEdge(null);
-
     if (mode !== "connect") return;
 
     if (!linkSource) {
@@ -189,7 +213,9 @@ export function SceneMap({
           <span>Связь</span>
           <select
             value={edgeType}
-            onChange={(event) => setEdgeType(event.target.value as EdgeType)}
+            onChange={(event) =>
+              setEdgeType(event.target.value as EdgeType)
+            }
           >
             {[
               "sends",
@@ -213,11 +239,13 @@ export function SceneMap({
         </label>
 
         <div className="graphHint">
-          {mode === "move"
-            ? "Тяни узел. Вертикальное перемещение меняет его логический уровень."
-            : linkSource
-              ? "Теперь выбери узел назначения."
-              : "Выбери источник, затем узел назначения."}
+          {activeMatch
+            ? `Подсвечен мотив: ${activeMatch.label}`
+            : mode === "move"
+              ? "Тяни узел. Вертикальное перемещение меняет логический уровень."
+              : linkSource
+                ? "Теперь выбери узел назначения."
+                : "Выбери источник, затем узел назначения."}
         </div>
 
         <button
@@ -283,6 +311,7 @@ export function SceneMap({
             const a = center(scene, from);
             const b = center(scene, to);
             const selected = selectedEdge === edge.id;
+            const motif = motifEdges.has(edge.id);
 
             return (
               <g key={edge.id}>
@@ -291,7 +320,7 @@ export function SceneMap({
                   y1={a.y}
                   x2={b.x}
                   y2={b.y}
-                  className={`${edgeClass(edge)} ${selected ? "selected" : ""}`}
+                  className={`${edgeClass(edge)} ${selected ? "selected" : ""} ${motif ? "motif" : ""}`}
                   markerEnd="url(#arrow)"
                 />
                 <line
@@ -309,7 +338,7 @@ export function SceneMap({
                 <text
                   x={(a.x + b.x) / 2}
                   y={(a.y + b.y) / 2 - 7}
-                  className="edgeLabel"
+                  className={`edgeLabel ${motif ? "motif" : ""}`}
                 >
                   {edge.type}
                 </text>
@@ -321,12 +350,13 @@ export function SceneMap({
             const position = getPosition(scene, node);
             const selected = selectedNode === node.id;
             const source = linkSource === node.id;
+            const motif = motifNodes.has(node.id);
 
             return (
               <g
                 key={node.id}
                 transform={`translate(${position.x} ${position.y})`}
-                className={`graphNode ${selected ? "selected" : ""} ${source ? "source" : ""}`}
+                className={`graphNode ${selected ? "selected" : ""} ${source ? "source" : ""} ${motif ? "motif" : ""}`}
                 onPointerDown={(event) => beginDrag(event, node)}
                 onClick={(event) => {
                   event.stopPropagation();
@@ -358,9 +388,7 @@ export function SceneMap({
         <span><i className="legendLine contradiction" /> contradicts</span>
         <span><i className="legendLine blocking" /> blocks</span>
         <span><i className="legendLine feedback" /> feedback / update</span>
-        <span><i className="legendNode rule" /> Rule</span>
-        <span><i className="legendNode gate" /> Gate</span>
-        <span><i className="legendNode sanction" /> Sanction</span>
+        <span><i className="legendNode motif" /> найденный мотив</span>
       </div>
     </div>
   );
