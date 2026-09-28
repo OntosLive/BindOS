@@ -19,6 +19,41 @@
     },
     "nodes": { "type": "array" },
     "edges": { "type": "array" },
+    "operators": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "label", "target", "epistemic"],
+        "properties": {
+          "id": { "type": "string" },
+          "type": {
+            "enum": [
+              "classifies",
+              "governs",
+              "permits",
+              "forbids",
+              "sanctions",
+              "reframes",
+              "updates",
+              "blocks"
+            ]
+          },
+          "label": { "type": "string" },
+          "sourceNodeId": { "type": "string" },
+          "target": {
+            "type": "object",
+            "required": ["kind", "id"],
+            "properties": {
+              "kind": { "enum": ["node", "edge", "operator"] },
+              "id": { "type": "string" }
+            }
+          },
+          "epistemic": {
+            "enum": ["observed", "inferred", "suggested"]
+          }
+        }
+      }
+    },
     "moves": { "type": "array" },
     "timeline": {
       "type": "array",

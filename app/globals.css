@@ -871,3 +871,166 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Russell logical type system */
+.logicalTypeLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, .7fr);
+  gap: 18px;
+}
+.logicalTypeHeader {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: end;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.logicalTypeHeader h2 {
+  margin: 5px 0 6px;
+  font-size: 27px;
+}
+.logicalTypeHeader p {
+  max-width: 760px;
+  line-height: 1.5;
+}
+.typeBuckets {
+  display: grid;
+  gap: 10px;
+}
+.typeBucket {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: #0e1216;
+}
+.typeRank {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--accent-2);
+  padding-top: 4px;
+}
+.typeItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.typeItem {
+  display: grid;
+  gap: 2px;
+  max-width: 320px;
+  padding: 7px 9px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--panel-2);
+}
+.typeItem span {
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  font-size: 9px;
+}
+.typeItem strong {
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+.typeIssues {
+  display: grid;
+  gap: 5px;
+  margin-top: 12px;
+  padding: 11px 13px;
+  border: 1px solid var(--danger);
+  border-radius: 12px;
+  color: #ffd6d6;
+  font-size: 12px;
+}
+.logicalTypeSide {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+.operatorForm {
+  display: grid;
+  gap: 9px;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: #0e1216;
+}
+.operatorForm label {
+  display: grid;
+  gap: 5px;
+}
+.operatorForm label > span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.operatorForm input,
+.operatorForm select {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--panel-2);
+  color: var(--text);
+  padding: 8px 10px;
+}
+.operatorList {
+  display: grid;
+  gap: 8px;
+}
+.operatorRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 38px;
+  gap: 8px;
+  align-items: stretch;
+}
+.operatorFocus {
+  display: grid;
+  gap: 3px;
+  text-align: left;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #0e1216;
+  color: var(--text);
+  padding: 9px 10px;
+  cursor: pointer;
+}
+.operatorFocus span,
+.operatorFocus small {
+  color: var(--muted);
+  font-size: 10px;
+}
+.operatorFocus strong {
+  font-size: 12px;
+}
+.mapEdge.logicalFocus {
+  stroke: #ffffff;
+  stroke-width: 4.5;
+}
+.edgeLabel.logicalFocus {
+  fill: #ffffff;
+  font-weight: 900;
+}
+.graphNode.logicalFocus .nodeRect {
+  stroke: #ffffff;
+  stroke-width: 3.3;
+}
+.legendNode.logical {
+  border-color: #ffffff;
+  border-width: 3px;
+}
+@media (max-width: 780px) {
+  .logicalTypeLayout {
+    grid-template-columns: 1fr;
+  }
+  .typeBucket {
+    grid-template-columns: 42px minmax(0, 1fr);
+  }
+}

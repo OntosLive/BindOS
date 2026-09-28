@@ -104,6 +104,24 @@ export const spontaneousScene: Scene = {
       type: "blocks",
     },
   ],
+  operators: [
+    {
+      id: "op-meaning",
+      type: "reframes",
+      label: "Выполнение просьбы классифицируется как неспонтанное",
+      sourceNodeId: "rule-spontaneous",
+      target: { kind: "edge", id: "e1" },
+      epistemic: "inferred",
+    },
+    {
+      id: "op-meta-lock",
+      type: "blocks",
+      label: "Обсуждение самой классификации заблокировано",
+      sourceNodeId: "meta-gate",
+      target: { kind: "operator", id: "op-meaning" },
+      epistemic: "inferred",
+    },
+  ],
   moves: [
     {
       id: "comply",

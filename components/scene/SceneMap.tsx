@@ -68,10 +68,14 @@ export function SceneMap({
   scene,
   onChange,
   activeMatch,
+  focusNodeIds = [],
+  focusEdgeIds = [],
 }: {
   scene: Scene;
   onChange: (scene: Scene) => void;
   activeMatch?: PatternMatch | null;
+  focusNodeIds?: string[];
+  focusEdgeIds?: string[];
 }) {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const dragRef = useRef<{
@@ -96,6 +100,8 @@ export function SceneMap({
     () => new Set(activeMatch?.edgeIds ?? []),
     [activeMatch],
   );
+  const typeNodes = useMemo(() => new Set(focusNodeIds), [focusNodeIds]);
+  const typeEdges = useMemo(() => new Set(focusEdgeIds), [focusEdgeIds]);
 
   function clientToSvg(clientX: number, clientY: number) {
     const svg = svgRef.current;
@@ -242,7 +248,7 @@ export function SceneMap({
           {activeMatch
             ? `Подсвечен мотив: ${activeMatch.label}`
             : mode === "move"
-              ? "Тяни узел. Вертикальное перемещение меняет логический уровень."
+              ? "Тяни узел. Вертикальное перемещение меняет операционный слой."
               : linkSource
                 ? "Теперь выбери узел назначения."
                 : "Выбери источник, затем узел назначения."}
@@ -265,7 +271,7 @@ export function SceneMap({
           viewBox={`0 0 ${width} ${CANVAS_HEIGHT}`}
           style={{ minWidth: Math.min(width, 1180) }}
           role="img"
-          aria-label="Интерактивная карта логических уровней сцены"
+          aria-label="Интерактивная карта операционных слоёв сцены"
           onPointerMove={dragNode}
           onPointerUp={endDrag}
           onPointerCancel={endDrag}
@@ -299,7 +305,7 @@ export function SceneMap({
                 y={GRAPH_LEVEL_Y[level] - 7}
                 className="levelLabel"
               >
-                L{level}
+                S{level}
               </text>
             </g>
           ))}
@@ -312,6 +318,7 @@ export function SceneMap({
             const b = center(scene, to);
             const selected = selectedEdge === edge.id;
             const motif = motifEdges.has(edge.id);
+            const logicalFocus = typeEdges.has(edge.id);
 
             return (
               <g key={edge.id}>
@@ -320,7 +327,7 @@ export function SceneMap({
                   y1={a.y}
                   x2={b.x}
                   y2={b.y}
-                  className={`${edgeClass(edge)} ${selected ? "selected" : ""} ${motif ? "motif" : ""}`}
+                  className={`${edgeClass(edge)} ${selected ? "selected" : ""} ${motif ? "motif" : ""} ${logicalFocus ? "logicalFocus" : ""}`}
                   markerEnd="url(#arrow)"
                 />
                 <line
@@ -338,7 +345,7 @@ export function SceneMap({
                 <text
                   x={(a.x + b.x) / 2}
                   y={(a.y + b.y) / 2 - 7}
-                  className={`edgeLabel ${motif ? "motif" : ""}`}
+                  className={`edgeLabel ${motif ? "motif" : ""} ${logicalFocus ? "logicalFocus" : ""}`}
                 >
                   {edge.type}
                 </text>
@@ -351,12 +358,13 @@ export function SceneMap({
             const selected = selectedNode === node.id;
             const source = linkSource === node.id;
             const motif = motifNodes.has(node.id);
+            const logicalFocus = typeNodes.has(node.id);
 
             return (
               <g
                 key={node.id}
                 transform={`translate(${position.x} ${position.y})`}
-                className={`graphNode ${selected ? "selected" : ""} ${source ? "source" : ""} ${motif ? "motif" : ""}`}
+                className={`graphNode ${selected ? "selected" : ""} ${source ? "source" : ""} ${motif ? "motif" : ""} ${logicalFocus ? "logicalFocus" : ""}`}
                 onPointerDown={(event) => beginDrag(event, node)}
                 onClick={(event) => {
                   event.stopPropagation();
@@ -373,7 +381,7 @@ export function SceneMap({
                 <foreignObject x="0" y="0" width={NODE_W} height={NODE_H}>
                   <div className="nodeLabel">
                     <div className="nodeType">
-                      {node.type} · L{node.level ?? "?"} · {node.epistemic}
+                      {node.type} · S{node.level ?? "?"} · {node.epistemic}
                     </div>
                     <div>{node.label}</div>
                   </div>
@@ -389,6 +397,7 @@ export function SceneMap({
         <span><i className="legendLine blocking" /> blocks</span>
         <span><i className="legendLine feedback" /> feedback / update</span>
         <span><i className="legendNode motif" /> найденный мотив</span>
+        <span><i className="legendNode logical" /> Russell focus</span>
       </div>
     </div>
   );

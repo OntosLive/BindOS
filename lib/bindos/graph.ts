@@ -1,4 +1,4 @@
-import type { EdgeType, LogicalLevel, Scene } from "./types";
+import type { EdgeType, LogicalLevel, Scene, SceneReference } from "./types";
 
 export const GRAPH_LEVEL_Y: Record<LogicalLevel, number> = {
   0: 58,
@@ -41,19 +41,86 @@ export function addSceneEdge(
   };
 }
 
+function operatorCascade(
+  scene: Scene,
+  removedRefs: SceneReference[],
+): Set<string> {
+  const removed = new Set(
+    removedRefs
+      .filter((ref) => ref.kind === "operator")
+      .map((ref) => ref.id),
+  );
+
+  const removedKeys = new Set(removedRefs.map((ref) => `${ref.kind}:${ref.id}`));
+  let changed = true;
+
+  while (changed) {
+    changed = false;
+    for (const operator of scene.operators ?? []) {
+      if (removed.has(operator.id)) continue;
+      const targetKey = `${operator.target.kind}:${operator.target.id}`;
+      const sourceRemoved =
+        operator.sourceNodeId &&
+        removedKeys.has(`node:${operator.sourceNodeId}`);
+      const targetRemoved =
+        removedKeys.has(targetKey) ||
+        (operator.target.kind === "operator" && removed.has(operator.target.id));
+
+      if (sourceRemoved || targetRemoved) {
+        removed.add(operator.id);
+        changed = true;
+      }
+    }
+  }
+
+  return removed;
+}
+
 export function removeSceneEdge(scene: Scene, edgeId: string): Scene {
+  const removedOperators = operatorCascade(scene, [
+    { kind: "edge", id: edgeId },
+  ]);
+
   return {
     ...scene,
     edges: scene.edges.filter((edge) => edge.id !== edgeId),
+    operators: (scene.operators ?? []).filter(
+      (operator) => !removedOperators.has(operator.id),
+    ),
+  };
+}
+
+export function removeSceneOperator(scene: Scene, operatorId: string): Scene {
+  const removedOperators = operatorCascade(scene, [
+    { kind: "operator", id: operatorId },
+  ]);
+
+  return {
+    ...scene,
+    operators: (scene.operators ?? []).filter(
+      (operator) => !removedOperators.has(operator.id),
+    ),
   };
 }
 
 export function removeSceneNode(scene: Scene, nodeId: string): Scene {
+  const removedEdgeIds = scene.edges
+    .filter((edge) => edge.from === nodeId || edge.to === nodeId)
+    .map((edge) => edge.id);
+
+  const removedOperators = operatorCascade(scene, [
+    { kind: "node", id: nodeId },
+    ...removedEdgeIds.map((id): SceneReference => ({ kind: "edge", id })),
+  ]);
+
   return {
     ...scene,
     nodes: scene.nodes.filter((node) => node.id !== nodeId),
     edges: scene.edges.filter(
       (edge) => edge.from !== nodeId && edge.to !== nodeId,
+    ),
+    operators: (scene.operators ?? []).filter(
+      (operator) => !removedOperators.has(operator.id),
     ),
     moves: scene.moves.map((move) => ({
       ...move,

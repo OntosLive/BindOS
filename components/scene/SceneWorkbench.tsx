@@ -15,6 +15,7 @@ import {
 } from "@/lib/bindos/temporal-samples";
 import { trajectorySignature, matchTrajectory } from "@/lib/bindos/trajectory";
 import type { GateStatus, Scene } from "@/lib/bindos/types";
+import { LogicalTypePanel } from "./LogicalTypePanel";
 import { SceneEditor } from "./SceneEditor";
 import { SceneMap } from "./SceneMap";
 import { TrajectoryPanel } from "./TrajectoryPanel";
@@ -47,6 +48,7 @@ function makeEmptyScene(): Scene {
     actors: [],
     nodes: [],
     edges: [],
+    operators: [],
     moves: [],
     timeline: [],
   };
@@ -63,6 +65,10 @@ export function SceneWorkbench() {
   const [scene, setScene] = useState<Scene>(spontaneousScene);
   const [editorOpen, setEditorOpen] = useState(false);
   const [activePatternId, setActivePatternId] = useState<string | null>(null);
+  const [typeFocus, setTypeFocus] = useState<{
+    nodeIds: string[];
+    edgeIds: string[];
+  }>({ nodeIds: [], edgeIds: [] });
 
   const analysis = useMemo(() => analyzeScene(scene), [scene]);
   const matches = useMemo(() => matchScene(scene), [scene]);
@@ -93,6 +99,7 @@ export function SceneWorkbench() {
   function replaceScene(next: Scene) {
     setScene(next);
     setActivePatternId(null);
+    setTypeFocus({ nodeIds: [], edgeIds: [] });
   }
 
   return (
@@ -118,6 +125,7 @@ export function SceneWorkbench() {
               exit: {analysis.exitEscape ? "open" : "closed"}
             </span>
             <span className="badge">time: {scene.timeline?.length ?? 0}</span>
+            <span className="badge">operators: {scene.operators?.length ?? 0}</span>
           </div>
 
           <div className="breakpoint">
@@ -133,7 +141,10 @@ export function SceneWorkbench() {
                   type="button"
                   className={`patternMatchButton ${activeMatch?.id === match.id ? "active" : ""}`}
                   key={match.id}
-                  onClick={() => setActivePatternId(match.id)}
+                  onClick={() => {
+                    setActivePatternId(match.id);
+                    setTypeFocus({ nodeIds: [], edgeIds: [] });
+                  }}
                 >
                   <span>
                     <strong>{match.label}</strong>
@@ -200,11 +211,29 @@ export function SceneWorkbench() {
           <div className="eyebrow">Topology editor</div>
           <h2>Машина внутри сцены</h2>
           <p className="muted">
-            Статический граф показывает структуру. Временная дорожка ниже показывает,
-            как структура разворачивается и самоподдерживается.
+            Полосы S0–S4 теперь только операционная раскладка сцены. Расселовский
+            тип вычисляется отдельно из того, над чем действует отношение или
+            метаоператор.
           </p>
         </div>
-        <SceneMap scene={scene} onChange={replaceScene} activeMatch={activeMatch} />
+        <SceneMap
+          scene={scene}
+          onChange={replaceScene}
+          activeMatch={activeMatch}
+          focusNodeIds={typeFocus.nodeIds}
+          focusEdgeIds={typeFocus.edgeIds}
+        />
+      </div>
+
+      <div className="panel">
+        <LogicalTypePanel
+          scene={scene}
+          onChange={replaceScene}
+          onFocus={(focus) => {
+            setActivePatternId(null);
+            setTypeFocus(focus);
+          }}
+        />
       </div>
 
       <div className="panel">

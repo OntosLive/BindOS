@@ -317,3 +317,30 @@ The map is primary. Long prose is secondary.
 > **A large class of apparently insoluble communication problems becomes insoluble because the conflict is located at a different logical level from the level on which the participants are trying to solve it.**
 
 BindOS exists to make that level visible.
+
+
+## 11. Russellian logical types
+
+BindOS distinguishes **scene bands** from **Russellian logical types**.
+
+The visual bands S0–S4 are an interface convention for arranging events, messages, rules, meta-rules, and context. They are not themselves Russell's type hierarchy.
+
+The canonical type rule is relational:
+
+- **τ0:** scene objects;
+- **τ1:** relations over scene objects;
+- **τ(n+1):** an operator acting on an entity of type τn.
+
+Therefore a rule that acts on a relation is represented not merely as a “higher node”, but as an explicit operator targeting that relation. A further rule may target that operator and therefore occupy the next logical type.
+
+Logical type is **computed from the target of the operation**, not inferred from vocabulary such as “rule”, “meta-rule”, “context”, or social status.
+
+The resulting structure may branch. BindOS therefore treats logical typing as a partial order of relations-over-relations, not as one mandatory semantic staircase.
+
+Direct or indirect operator self-application creates a type cycle. The kernel must surface that cycle explicitly rather than silently assigning a type.
+
+Canonical distinction:
+
+> **Scene band answers where we place something for human reading. Russell type answers what that thing operates on.**
+
+This distinction is foundational for all future analysis of cross-level conflicts, meta-communication, recursive binds, and rule changes.

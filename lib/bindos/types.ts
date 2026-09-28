@@ -48,6 +48,23 @@ export type TemporalKind =
   | "criterion-shift"
   | "other";
 
+export type SceneReferenceKind = "node" | "edge" | "operator";
+
+export interface SceneReference {
+  kind: SceneReferenceKind;
+  id: string;
+}
+
+export type OperatorType =
+  | "classifies"
+  | "governs"
+  | "permits"
+  | "forbids"
+  | "sanctions"
+  | "reframes"
+  | "updates"
+  | "blocks";
+
 export interface Actor {
   id: string;
   label: string;
@@ -81,6 +98,15 @@ export interface SceneEdge {
   weight?: number;
 }
 
+export interface SceneOperator {
+  id: string;
+  type: OperatorType;
+  label: string;
+  sourceNodeId?: string;
+  target: SceneReference;
+  epistemic: EpistemicState;
+}
+
 export interface SceneMove {
   id: string;
   label: string;
@@ -108,6 +134,7 @@ export interface Scene {
   actors: Actor[];
   nodes: SceneNode[];
   edges: SceneEdge[];
+  operators?: SceneOperator[];
   moves: SceneMove[];
   timeline?: TemporalEvent[];
 }
