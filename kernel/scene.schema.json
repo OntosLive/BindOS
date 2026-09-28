@@ -2,119 +2,56 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "BindOS Scene",
   "type": "object",
-  "required": [
-    "id",
-    "actors",
-    "nodes",
-    "edges"
-  ],
+  "required": ["id", "actors", "nodes", "edges"],
   "properties": {
-    "id": {
-      "type": "string"
-    },
-    "title": {
-      "type": "string"
-    },
+    "id": { "type": "string" },
+    "title": { "type": "string" },
     "actors": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": [
-          "id",
-          "label"
-        ],
+        "required": ["id", "label"],
         "properties": {
-          "id": {
-            "type": "string"
-          },
-          "label": {
-            "type": "string"
-          }
+          "id": { "type": "string" },
+          "label": { "type": "string" }
         }
       }
     },
-    "nodes": {
+    "nodes": { "type": "array" },
+    "edges": { "type": "array" },
+    "moves": { "type": "array" },
+    "timeline": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": [
-          "id",
-          "type",
-          "epistemic"
-        ],
+        "required": ["id", "t", "kind", "label"],
         "properties": {
-          "id": {
-            "type": "string"
-          },
-          "type": {
+          "id": { "type": "string" },
+          "t": { "type": "number" },
+          "actorId": { "type": "string" },
+          "kind": {
             "enum": [
-              "Event",
-              "Message",
-              "Interpretation",
-              "Rule",
-              "MetaRule",
-              "Gate",
-              "Sanction",
-              "Context",
-              "State"
+              "approach",
+              "withdraw",
+              "rescue",
+              "dependency",
+              "guilt-signal",
+              "compensate",
+              "demand",
+              "relief",
+              "pressure",
+              "repair-attempt",
+              "criterion-set",
+              "criterion-met",
+              "criterion-shift",
+              "other"
             ]
           },
-          "level": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
+          "label": { "type": "string" },
+          "magnitude": { "type": "number" },
+          "respondsTo": { "type": "string" },
           "epistemic": {
-            "enum": [
-              "observed",
-              "inferred",
-              "suggested"
-            ]
-          },
-          "label": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "edges": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": [
-          "from",
-          "to",
-          "type"
-        ],
-        "properties": {
-          "from": {
-            "type": "string"
-          },
-          "to": {
-            "type": "string"
-          },
-          "type": {
-            "enum": [
-              "sends",
-              "interpretsAs",
-              "requires",
-              "forbids",
-              "sanctions",
-              "permits",
-              "blocks",
-              "dependsOn",
-              "escalates",
-              "reinforces",
-              "contradicts",
-              "reframes",
-              "exitsTo",
-              "updates"
-            ]
-          },
-          "weight": {
-            "type": "number"
+            "enum": ["observed", "inferred", "suggested"]
           }
         }
       }

@@ -32,6 +32,22 @@ export type GateType = "action" | "meta" | "exit" | "interpretation";
 export type GateStatus = "open" | "closed" | "conditional";
 export type MoveKind = "action" | "meta" | "exit";
 
+export type TemporalKind =
+  | "approach"
+  | "withdraw"
+  | "rescue"
+  | "dependency"
+  | "guilt-signal"
+  | "compensate"
+  | "demand"
+  | "relief"
+  | "pressure"
+  | "repair-attempt"
+  | "criterion-set"
+  | "criterion-met"
+  | "criterion-shift"
+  | "other";
+
 export interface Actor {
   id: string;
   label: string;
@@ -75,6 +91,17 @@ export interface SceneMove {
   blockedByGateIds?: string[];
 }
 
+export interface TemporalEvent {
+  id: string;
+  t: number;
+  actorId?: string;
+  kind: TemporalKind;
+  label: string;
+  magnitude?: number;
+  respondsTo?: string;
+  epistemic?: EpistemicState;
+}
+
 export interface Scene {
   id: string;
   title: string;
@@ -82,6 +109,7 @@ export interface Scene {
   nodes: SceneNode[];
   edges: SceneEdge[];
   moves: SceneMove[];
+  timeline?: TemporalEvent[];
 }
 
 export type MoveStatus = "clean" | "sanctioned" | "blocked";
