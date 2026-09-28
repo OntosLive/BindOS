@@ -1,7 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { analyzeScene } from "@/lib/bindos/engine";\nimport { presencePressureScene, textRefusalScene } from "@/lib/bindos/channel-samples";
+import { analyzeScene } from "@/lib/bindos/engine";
+import {
+  presencePressureScene,
+  textRefusalScene,
+} from "@/lib/bindos/channel-samples";
 import {
   matchScene,
   sceneSignature,
@@ -13,9 +17,14 @@ import {
   pursuerDistancerScene,
   rescueDependencyScene,
 } from "@/lib/bindos/temporal-samples";
-import { trajectorySignature, matchTrajectory } from "@/lib/bindos/trajectory";
+import {
+  trajectorySignature,
+  matchTrajectory,
+} from "@/lib/bindos/trajectory";
 import type { GateStatus, Scene } from "@/lib/bindos/types";
-import { ChannelFieldPanel } from "./ChannelFieldPanel";\nimport { LogicalTypePanel } from "./LogicalTypePanel";
+import { ChannelFieldPanel } from "./ChannelFieldPanel";
+import { LogicalTypePanel } from "./LogicalTypePanel";
+import { PrimitiveModelPanel } from "./PrimitiveModelPanel";
 import { SceneEditor } from "./SceneEditor";
 import { SceneMap } from "./SceneMap";
 import { TrajectoryPanel } from "./TrajectoryPanel";
@@ -38,7 +47,9 @@ function toggleGate(scene: Scene, gateId: string): Scene {
 }
 
 function gateIsOpen(scene: Scene, id: string) {
-  return scene.nodes.find((node) => node.id === id)?.metadata?.gateStatus === "open";
+  return (
+    scene.nodes.find((node) => node.id === id)?.metadata?.gateStatus === "open"
+  );
 }
 
 function makeEmptyScene(): Scene {
@@ -78,6 +89,7 @@ export function SceneWorkbench() {
     () => trajectorySignature(dynamicMatches),
     [dynamicMatches],
   );
+
   const signature =
     temporalSignature === "∅"
       ? staticSignature
@@ -116,21 +128,28 @@ export function SceneWorkbench() {
           </div>
 
           <div className="statusRow">
-            <span className="badge">conflict: {analysis.hasRuleConflict ? "yes" : "no"}</span>
-            <span className="badge">clean L0: {analysis.cleanActionMoves}</span>
+            <span className="badge">
+              conflict: {analysis.hasRuleConflict ? "yes" : "no"}
+            </span>
+            <span className="badge">
+              clean L0: {analysis.cleanActionMoves}
+            </span>
             <span className={`badge ${analysis.metaEscape ? "clean" : "blocked"}`}>
               meta: {analysis.metaEscape ? "open" : "closed"}
             </span>
             <span className={`badge ${analysis.exitEscape ? "clean" : "blocked"}`}>
               exit: {analysis.exitEscape ? "open" : "closed"}
             </span>
-            <span className="badge">time: {scene.timeline?.length ?? 0}</span>
-            <span className="badge">operators: {scene.operators?.length ?? 0}</span>
+            <span className="badge">
+              operators: {scene.operators?.length ?? 0}
+            </span>
           </div>
 
           <div className="breakpoint">
             <strong>Lowest breakpoint · {analysis.lowestBreakpoint}</strong>
-            <div className="muted">{breakpointText[analysis.lowestBreakpoint]}</div>
+            <div className="muted">
+              {breakpointText[analysis.lowestBreakpoint]}
+            </div>
           </div>
 
           <div className="patternMatches">
@@ -150,11 +169,15 @@ export function SceneWorkbench() {
                     <strong>{match.label}</strong>
                     <small>{match.family}</small>
                   </span>
-                  <em>{match.nodeIds.length} nodes · {match.edgeIds.length} edges</em>
+                  <em>
+                    {match.nodeIds.length} nodes · {match.edgeIds.length} edges
+                  </em>
                 </button>
               ))
             ) : (
-              <div className="muted">Статических мотивов пока не найдено.</div>
+              <div className="muted">
+                Статических мотивов пока не найдено.
+              </div>
             )}
           </div>
 
@@ -166,7 +189,9 @@ export function SceneWorkbench() {
               <details>
                 <summary>Показать структурное доказательство</summary>
                 <ul>
-                  {activeMatch.evidence.map((item) => <li key={item}>{item}</li>)}
+                  {activeMatch.evidence.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
                 </ul>
               </details>
             </div>
@@ -177,33 +202,103 @@ export function SceneWorkbench() {
           <div className="eyebrow">Управление сценой</div>
           {hasCanonicalGates && (
             <>
-              <button className="controlButton" data-open={metaOpen} onClick={() => replaceScene(toggleGate(scene, "meta-gate"))} type="button">
-                <span>MetaGate</span><strong>{metaOpen ? "OPEN" : "CLOSED"}</strong>
+              <button
+                className="controlButton"
+                data-open={metaOpen}
+                onClick={() => replaceScene(toggleGate(scene, "meta-gate"))}
+                type="button"
+              >
+                <span>MetaGate</span>
+                <strong>{metaOpen ? "OPEN" : "CLOSED"}</strong>
               </button>
-              <button className="controlButton" data-open={exitOpen} onClick={() => replaceScene(toggleGate(scene, "exit-gate"))} type="button">
-                <span>ExitGate</span><strong>{exitOpen ? "OPEN" : "CLOSED"}</strong>
+              <button
+                className="controlButton"
+                data-open={exitOpen}
+                onClick={() => replaceScene(toggleGate(scene, "exit-gate"))}
+                type="button"
+              >
+                <span>ExitGate</span>
+                <strong>{exitOpen ? "OPEN" : "CLOSED"}</strong>
               </button>
             </>
           )}
-          <button className="controlButton" onClick={() => setEditorOpen((value) => !value)} type="button">
-            <span>Формы / таблица</span><strong>{editorOpen ? "CLOSE" : "OPEN"}</strong>
+
+          <button
+            className="controlButton"
+            onClick={() => setEditorOpen((value) => !value)}
+            type="button"
+          >
+            <span>Формы / таблица</span>
+            <strong>{editorOpen ? "CLOSE" : "OPEN"}</strong>
           </button>
-          <button className="controlButton" onClick={() => replaceScene(makeEmptyScene())} type="button">
-            <span>Пустая сцена</span><strong>NEW</strong>
+
+          <button
+            className="controlButton"
+            onClick={() => replaceScene(makeEmptyScene())}
+            type="button"
+          >
+            <span>Пустая сцена</span>
+            <strong>NEW</strong>
           </button>
-          <button className="controlButton" onClick={() => replaceScene(spontaneousScene)} type="button">
-            <span>Double Bind</span><strong>LOAD</strong>
+
+          <button
+            className="controlButton"
+            onClick={() => replaceScene(spontaneousScene)}
+            type="button"
+          >
+            <span>Double Bind</span>
+            <strong>LOAD</strong>
           </button>
-          <button className="controlButton" onClick={() => replaceScene(pursuerDistancerScene)} type="button">
-            <span>Pursuer–Distancer</span><strong>TIME</strong>
+
+          <button
+            className="controlButton"
+            onClick={() => replaceScene(textRefusalScene)}
+            type="button"
+          >
+            <span>Отказ в тексте</span>
+            <strong>CHANNEL</strong>
           </button>
-          <button className="controlButton" onClick={() => replaceScene(rescueDependencyScene)} type="button">
-            <span>Rescue–Dependency</span><strong>TIME</strong>
+
+          <button
+            className="controlButton"
+            onClick={() => replaceScene(presencePressureScene)}
+            type="button"
+          >
+            <span>Отказ при присутствии</span>
+            <strong>CHANNEL</strong>
           </button>
-          <button className="controlButton" onClick={() => replaceScene(guiltCompensationScene)} type="button">
-            <span>Guilt–Compensation</span><strong>TIME</strong>
+
+          <button
+            className="controlButton"
+            onClick={() => replaceScene(pursuerDistancerScene)}
+            type="button"
+          >
+            <span>Pursuer–Distancer</span>
+            <strong>TIME</strong>
+          </button>
+
+          <button
+            className="controlButton"
+            onClick={() => replaceScene(rescueDependencyScene)}
+            type="button"
+          >
+            <span>Rescue–Dependency</span>
+            <strong>TIME</strong>
+          </button>
+
+          <button
+            className="controlButton"
+            onClick={() => replaceScene(guiltCompensationScene)}
+            type="button"
+          >
+            <span>Guilt–Compensation</span>
+            <strong>TIME</strong>
           </button>
         </div>
+      </div>
+
+      <div className="panel">
+        <PrimitiveModelPanel scene={scene} />
       </div>
 
       <div className="panel topologyPanel">
@@ -211,9 +306,8 @@ export function SceneWorkbench() {
           <div className="eyebrow">Topology editor</div>
           <h2>Машина внутри сцены</h2>
           <p className="muted">
-            Полосы S0–S4 теперь только операционная раскладка сцены. Расселовский
-            тип вычисляется отдельно из того, над чем действует отношение или
-            метаоператор.
+            Полосы S0–S4 нужны только для чтения. Тип, стоимость и иерархия
+            вычисляются из примитивов, а не записываются как отдельные сущности.
           </p>
         </div>
         <SceneMap
@@ -237,6 +331,10 @@ export function SceneWorkbench() {
       </div>
 
       <div className="panel">
+        <ChannelFieldPanel scene={scene} onChange={replaceScene} />
+      </div>
+
+      <div className="panel">
         <TrajectoryPanel scene={scene} onChange={replaceScene} />
       </div>
 
@@ -245,7 +343,9 @@ export function SceneWorkbench() {
           <div className="sectionIntro">
             <div className="eyebrow">Scene compiler</div>
             <h2>Точная разметка</h2>
-            <p className="muted">Формы остаются вторым входом для санкций, gates и ходов.</p>
+            <p className="muted">
+              Формы остаются вторым входом для санкций, gates и ходов.
+            </p>
           </div>
           <SceneEditor scene={scene} onChange={replaceScene} />
         </div>
@@ -259,16 +359,22 @@ export function SceneWorkbench() {
               <div>
                 <strong>{item.move.label}</strong>
                 <div className="muted">
-                  {item.reasons.length ? item.reasons.join(" · ") : "ограничений не найдено"}
+                  {item.reasons.length
+                    ? item.reasons.join(" · ")
+                    : "ограничений не найдено"}
                 </div>
               </div>
               <span className={`badge ${item.status}`}>
                 {item.status.toUpperCase()}
-                {item.effectiveCost > 0 ? ` · cost ${item.effectiveCost.toFixed(1)}` : ""}
+                {item.effectiveCost > 0
+                  ? ` · cost ${item.effectiveCost.toFixed(1)}`
+                  : ""}
               </span>
             </div>
           ))}
-          {!analysis.moves.length && <div className="muted">Ходов пока нет.</div>}
+          {!analysis.moves.length && (
+            <div className="muted">Ходов пока нет.</div>
+          )}
         </div>
       </div>
     </section>

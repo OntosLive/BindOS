@@ -1182,3 +1182,111 @@ h1 {
     grid-template-columns: 90px minmax(50px, 1fr) 44px;
   }
 }
+
+
+/* Minimal primitive model */
+.primitiveModel {
+  display: grid;
+  gap: 16px;
+}
+.primitiveHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 14px;
+}
+.primitiveHeader h2 {
+  margin: 5px 0 6px;
+  font-size: 27px;
+}
+.primitiveHeader p {
+  max-width: 760px;
+  line-height: 1.5;
+}
+.primitiveGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+.primitiveCard {
+  display: grid;
+  gap: 4px;
+  min-height: 110px;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: #0e1216;
+}
+.primitiveCard > span {
+  color: var(--accent-2);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 800;
+}
+.primitiveCard > strong {
+  font-size: 30px;
+  line-height: 1;
+}
+.primitiveCard > small {
+  color: var(--muted);
+  line-height: 1.35;
+}
+.primitiveDerived {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.primitiveDerived > div {
+  display: grid;
+  gap: 3px;
+  padding: 10px 11px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel-2);
+}
+.primitiveDerived strong {
+  font-size: 12px;
+}
+.primitiveDerived span {
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.35;
+}
+.primitiveMoveVector {
+  display: grid;
+  gap: 8px;
+}
+.moveVectorRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.moveVectorRow > span {
+  display: inline-flex;
+  gap: 8px;
+  align-items: baseline;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 10px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.moveVectorRow strong {
+  color: var(--text);
+}
+@media (max-width: 900px) {
+  .primitiveGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .primitiveDerived {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .primitiveGrid,
+  .primitiveDerived {
+    grid-template-columns: 1fr;
+  }
+}

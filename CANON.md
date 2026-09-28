@@ -373,3 +373,30 @@ What is ordinarily called charisma, authority, intimidation, social pressure, or
 The product surface is now:
 
 > **Topology × Russell type × Channel × Cost × Time.**
+
+
+## 13. Minimal primitive model
+
+BindOS uses five canonical primitives:
+
+1. **Entity** — something that can participate in a scene.
+2. **Relation** — a directed or undirected connection between entities.
+3. **Operator** — something that acts on an entity, relation, move, or another operator.
+4. **Channel** — the medium through which an operator is transmitted.
+5. **Weight** — the strength, conductance, gain, cost, or relief carried by that relation or operator.
+
+Everything else should be derived where possible.
+
+Russell rank is derived from the target of an operator.
+
+Transition cost is derived from weighted influences on a move.
+
+Meta-level is derived from operators targeting relations or other operators.
+
+Hierarchy and dominance are derived from direction, reachability, asymmetry, reinforcement, and weight.
+
+A channel is not a logical type. A verbal, nonverbal, textual, institutional, or algorithmic signal can occupy different Russell ranks depending on what it acts on.
+
+Canonical compression rule:
+
+> **Do not add a new primitive if the phenomenon can be reconstructed from entity + relation + operator + channel + weight.**
