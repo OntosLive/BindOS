@@ -344,3 +344,32 @@ Canonical distinction:
 > **Scene band answers where we place something for human reading. Russell type answers what that thing operates on.**
 
 This distinction is foundational for all future analysis of cross-level conflicts, meta-communication, recursive binds, and rule changes.
+
+
+## 12. Channel × logical type × transition cost
+
+BindOS treats communication channel, Russellian logical type, and transition cost as independent axes.
+
+Channel answers **how a difference is transmitted**. Russellian type answers **what the signal or operator acts on**. Transition cost answers **how strongly the signal changes the practical accessibility of a move**.
+
+Canonical channels include verbal language, text, prosody, facial expression, gaze, gesture, posture, proximity, touch, silence, timing, group response, environment, institutions, and algorithms.
+
+A move may be formally permitted while being functionally expensive.
+
+BindOS represents channel influence using:
+
+> **ΔC = sign × magnitude × conductance × gain**
+
+The kernel distinguishes **actual sanction** from **expected sanction**. A sanction need not occur in the present scene to alter behaviour if its expected cost already changes the geometry of available transitions.
+
+Canonical distinction:
+
+> **Permission is not the same thing as low transition cost.**
+
+Text and physical presence may therefore instantiate different transition fields even when verbal content is identical.
+
+What is ordinarily called charisma, authority, intimidation, social pressure, or presence should not be assumed to be primitive traits. BindOS first attempts to decompose them into channels, conductance, gain, group reinforcement, expected cost, and logical operators.
+
+The product surface is now:
+
+> **Topology × Russell type × Channel × Cost × Time.**

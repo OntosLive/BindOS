@@ -25,7 +25,7 @@ const operatorTypes: OperatorType[] = [
   "blocks",
 ];
 
-const targetKinds: SceneReferenceKind[] = ["node", "edge", "operator"];
+const targetKinds: SceneReferenceKind[] = ["node", "move", "edge", "operator"];
 
 export function LogicalTypePanel({
   scene,
@@ -220,7 +220,7 @@ export function LogicalTypePanel({
                     className="operatorFocus"
                     onClick={() => focusOperator(operator.id)}
                   >
-                    <span>τ{entry?.rank ?? "?"} · {operator.type}</span>
+                    <span>τ{entry?.rank ?? "?"} · {operator.type}{operator.channel ? ` · ${operator.channel}` : ""}</span>
                     <strong>{operator.label}</strong>
                     <small>
                       → {operator.target.kind}:{operator.target.id}

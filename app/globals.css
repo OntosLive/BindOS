@@ -1034,3 +1034,151 @@ h1 {
     grid-template-columns: 42px minmax(0, 1fr);
   }
 }
+
+
+/* Channel field */
+.channelFieldLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(290px, .7fr);
+  gap: 18px;
+}
+.channelHeader {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: end;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.channelHeader h2 { margin: 5px 0 6px; font-size: 27px; }
+.channelHeader p { max-width: 760px; line-height: 1.5; }
+.fieldFormula {
+  display: grid;
+  gap: 3px;
+  padding: 10px 13px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #0e1216;
+}
+.fieldFormula span {
+  color: var(--accent-2);
+  font-size: 18px;
+  font-weight: 900;
+}
+.fieldFormula strong { font-size: 11px; color: var(--muted); }
+.transitionCards { display: grid; gap: 10px; }
+.transitionCard {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 13px;
+  background: #0e1216;
+}
+.transitionCardHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: start;
+}
+.transitionCardHead > div:first-child,
+.transitionNet { display: grid; gap: 3px; }
+.transitionCardHead span,
+.transitionNet span {
+  color: var(--muted);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.transitionCardHead strong { font-size: 15px; }
+.transitionNet { text-align: right; }
+.transitionNet strong { font-size: 24px; color: var(--warn); }
+.costSplit {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 11px 0;
+}
+.costSplit span {
+  display: inline-flex;
+  gap: 7px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 9px;
+  color: var(--muted);
+  font-size: 10px;
+}
+.costSplit strong { color: var(--text); }
+.channelBars { display: grid; gap: 6px; }
+.channelBar {
+  display: grid;
+  grid-template-columns: 110px minmax(60px, 1fr) 48px;
+  gap: 8px;
+  align-items: center;
+  font-size: 10px;
+}
+.channelBar > span { color: var(--muted); }
+.channelBar > div {
+  height: 6px;
+  background: var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.channelBar i {
+  display: block;
+  height: 100%;
+  background: var(--accent-2);
+}
+.channelBar strong { text-align: right; }
+.channelFieldSide {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+.channelForm {
+  display: grid;
+  gap: 9px;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: #0e1216;
+}
+.channelForm label { display: grid; gap: 5px; }
+.channelForm label > span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.channelForm input,
+.channelForm select {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--panel-2);
+  color: var(--text);
+  padding: 8px 10px;
+}
+.channelOperatorList { display: grid; gap: 8px; }
+.channelOperatorRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 38px;
+  gap: 8px;
+  align-items: start;
+}
+.channelOperatorRow > div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 9px 10px;
+  background: #0e1216;
+}
+.channelOperatorRow span,
+.channelOperatorRow small { color: var(--muted); font-size: 10px; }
+.channelOperatorRow strong { font-size: 12px; overflow-wrap: anywhere; }
+@media (max-width: 780px) {
+  .channelFieldLayout { grid-template-columns: 1fr; }
+  .channelBar {
+    grid-template-columns: 90px minmax(50px, 1fr) 44px;
+  }
+}

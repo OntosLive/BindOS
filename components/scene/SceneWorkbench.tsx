@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { analyzeScene } from "@/lib/bindos/engine";
+import { analyzeScene } from "@/lib/bindos/engine";\nimport { presencePressureScene, textRefusalScene } from "@/lib/bindos/channel-samples";
 import {
   matchScene,
   sceneSignature,
@@ -15,7 +15,7 @@ import {
 } from "@/lib/bindos/temporal-samples";
 import { trajectorySignature, matchTrajectory } from "@/lib/bindos/trajectory";
 import type { GateStatus, Scene } from "@/lib/bindos/types";
-import { LogicalTypePanel } from "./LogicalTypePanel";
+import { ChannelFieldPanel } from "./ChannelFieldPanel";\nimport { LogicalTypePanel } from "./LogicalTypePanel";
 import { SceneEditor } from "./SceneEditor";
 import { SceneMap } from "./SceneMap";
 import { TrajectoryPanel } from "./TrajectoryPanel";
@@ -264,7 +264,7 @@ export function SceneWorkbench() {
               </div>
               <span className={`badge ${item.status}`}>
                 {item.status.toUpperCase()}
-                {item.effectiveCost > 0 ? ` · cost ${item.effectiveCost}` : ""}
+                {item.effectiveCost > 0 ? ` · cost ${item.effectiveCost.toFixed(1)}` : ""}
               </span>
             </div>
           ))}
