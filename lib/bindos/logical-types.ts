@@ -44,21 +44,28 @@ function labelForRef(scene: Scene, ref: SceneReference): string {
     const node = scene.nodes.find((item) => item.id === ref.id);
     return node ? `${node.type}: ${node.label}` : `missing node: ${ref.id}`;
   }
-
+  if (ref.kind === "move") {
+    const move = scene.moves.find((item) => item.id === ref.id);
+    return move ? `Move: ${move.label}` : `missing move: ${ref.id}`;
+  }
   if (ref.kind === "edge") {
     const edge = scene.edges.find((item) => item.id === ref.id);
     if (!edge) return `missing edge: ${ref.id}`;
-    const from = scene.nodes.find((item) => item.id === edge.from)?.label ?? edge.from;
-    const to = scene.nodes.find((item) => item.id === edge.to)?.label ?? edge.to;
+    const from =
+      scene.nodes.find((item) => item.id === edge.from)?.label ?? edge.from;
+    const to =
+      scene.nodes.find((item) => item.id === edge.to)?.label ?? edge.to;
     return `${from} -[${edge.type}]-> ${to}`;
   }
-
   const operator = operatorById(scene, ref.id);
-  return operator ? `${operator.type}: ${operator.label}` : `missing operator: ${ref.id}`;
+  return operator
+    ? `${operator.type}: ${operator.label}`
+    : `missing operator: ${ref.id}`;
 }
 
 function refExists(scene: Scene, ref: SceneReference): boolean {
   if (ref.kind === "node") return scene.nodes.some((item) => item.id === ref.id);
+  if (ref.kind === "move") return scene.moves.some((item) => item.id === ref.id);
   if (ref.kind === "edge") return scene.edges.some((item) => item.id === ref.id);
   return Boolean(operatorById(scene, ref.id));
 }
@@ -78,7 +85,7 @@ export function rankOfReference(
     return null;
   }
 
-  if (ref.kind === "node") return 0;
+  if (ref.kind === "node" || ref.kind === "move") return 0;
   if (ref.kind === "edge") return 1;
 
   if (stack.includes(ref.id)) {
@@ -128,6 +135,14 @@ export function inspectLogicalTypes(scene: Scene): LogicalTypeInspection {
     });
   }
 
+  for (const move of scene.moves) {
+    entries.push({
+      ref: { kind: "move", id: move.id },
+      rank: 0,
+      label: `Move: ${move.label}`,
+    });
+  }
+
   for (const edge of scene.edges) {
     const ref: SceneReference = { kind: "edge", id: edge.id };
     entries.push({
@@ -145,18 +160,10 @@ export function inspectLogicalTypes(scene: Scene): LogicalTypeInspection {
       label: `${operator.type}: ${operator.label}`,
       target: operator.target,
     });
-
-    if (operator.sourceNodeId && !scene.nodes.some((node) => node.id === operator.sourceNodeId)) {
-      issues.push({
-        kind: "dangling-reference",
-        message: `Оператор ${operator.id} ссылается на отсутствующий source node ${operator.sourceNodeId}.`,
-      });
-    }
   }
 
   const buckets: Record<number, LogicalTypeEntry[]> = {};
   let maxRank = 0;
-
   for (const entry of entries) {
     if (entry.rank === null) continue;
     maxRank = Math.max(maxRank, entry.rank);
@@ -177,7 +184,6 @@ export function logicalTypeSignature(scene: Scene): string {
     .map(Number)
     .sort((a, b) => a - b)
     .map((rank) => `τ${rank}:${inspection.buckets[rank].length}`);
-
   return parts.length ? parts.join(" · ") : "∅";
 }
 
@@ -195,7 +201,9 @@ export function collectReferenceFootprint(
   if (ref.kind === "node") {
     return { nodeIds: [ref.id], edgeIds: [], operatorIds: [] };
   }
-
+  if (ref.kind === "move") {
+    return { nodeIds: [], edgeIds: [], operatorIds: [] };
+  }
   if (ref.kind === "edge") {
     const edge = scene.edges.find((item) => item.id === ref.id);
     return {
@@ -233,14 +241,18 @@ export function referenceOptions(
       label: `${node.type}: ${node.label}`,
     }));
   }
-
+  if (kind === "move") {
+    return scene.moves.map((move) => ({
+      id: move.id,
+      label: `Move: ${move.label}`,
+    }));
+  }
   if (kind === "edge") {
     return scene.edges.map((edge) => ({
       id: edge.id,
       label: labelForRef(scene, { kind: "edge", id: edge.id }),
     }));
   }
-
   return (scene.operators ?? []).map((operator) => ({
     id: operator.id,
     label: `${operator.type}: ${operator.label}`,

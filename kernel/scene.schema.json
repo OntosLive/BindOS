@@ -6,17 +6,7 @@
   "properties": {
     "id": { "type": "string" },
     "title": { "type": "string" },
-    "actors": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["id", "label"],
-        "properties": {
-          "id": { "type": "string" },
-          "label": { "type": "string" }
-        }
-      }
-    },
+    "actors": { "type": "array" },
     "nodes": { "type": "array" },
     "edges": { "type": "array" },
     "operators": {
@@ -35,17 +25,63 @@
               "sanctions",
               "reframes",
               "updates",
-              "blocks"
+              "blocks",
+              "reinforces"
             ]
           },
           "label": { "type": "string" },
           "sourceNodeId": { "type": "string" },
+          "sourceActorId": { "type": "string" },
+          "targetActorId": { "type": "string" },
+          "channel": {
+            "enum": [
+              "verbal",
+              "text",
+              "prosody",
+              "facial",
+              "gaze",
+              "gesture",
+              "posture",
+              "proximity",
+              "touch",
+              "silence",
+              "timing",
+              "group-response",
+              "environmental",
+              "institutional",
+              "algorithmic",
+              "other"
+            ]
+          },
           "target": {
             "type": "object",
             "required": ["kind", "id"],
             "properties": {
-              "kind": { "enum": ["node", "edge", "operator"] },
+              "kind": { "enum": ["node", "move", "edge", "operator"] },
               "id": { "type": "string" }
+            }
+          },
+          "influence": {
+            "type": "object",
+            "required": [
+              "moveId",
+              "direction",
+              "magnitude",
+              "conductance",
+              "gain",
+              "reality"
+            ],
+            "properties": {
+              "moveId": { "type": "string" },
+              "direction": { "enum": ["cost", "relief"] },
+              "magnitude": { "type": "number", "minimum": 0 },
+              "conductance": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "gain": { "type": "number", "minimum": 0 },
+              "reality": { "enum": ["actual", "expected"] }
             }
           },
           "epistemic": {
@@ -55,41 +91,6 @@
       }
     },
     "moves": { "type": "array" },
-    "timeline": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "required": ["id", "t", "kind", "label"],
-        "properties": {
-          "id": { "type": "string" },
-          "t": { "type": "number" },
-          "actorId": { "type": "string" },
-          "kind": {
-            "enum": [
-              "approach",
-              "withdraw",
-              "rescue",
-              "dependency",
-              "guilt-signal",
-              "compensate",
-              "demand",
-              "relief",
-              "pressure",
-              "repair-attempt",
-              "criterion-set",
-              "criterion-met",
-              "criterion-shift",
-              "other"
-            ]
-          },
-          "label": { "type": "string" },
-          "magnitude": { "type": "number" },
-          "respondsTo": { "type": "string" },
-          "epistemic": {
-            "enum": ["observed", "inferred", "suggested"]
-          }
-        }
-      }
-    }
+    "timeline": { "type": "array" }
   }
 }

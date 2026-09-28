@@ -48,7 +48,25 @@ export type TemporalKind =
   | "criterion-shift"
   | "other";
 
-export type SceneReferenceKind = "node" | "edge" | "operator";
+export type CommunicationChannel =
+  | "verbal"
+  | "text"
+  | "prosody"
+  | "facial"
+  | "gaze"
+  | "gesture"
+  | "posture"
+  | "proximity"
+  | "touch"
+  | "silence"
+  | "timing"
+  | "group-response"
+  | "environmental"
+  | "institutional"
+  | "algorithmic"
+  | "other";
+
+export type SceneReferenceKind = "node" | "edge" | "operator" | "move";
 
 export interface SceneReference {
   kind: SceneReferenceKind;
@@ -63,7 +81,20 @@ export type OperatorType =
   | "sanctions"
   | "reframes"
   | "updates"
-  | "blocks";
+  | "blocks"
+  | "reinforces";
+
+export type InfluenceDirection = "cost" | "relief";
+export type CostReality = "actual" | "expected";
+
+export interface TransitionInfluence {
+  moveId: string;
+  direction: InfluenceDirection;
+  magnitude: number;
+  conductance: number;
+  gain: number;
+  reality: CostReality;
+}
 
 export interface Actor {
   id: string;
@@ -103,7 +134,11 @@ export interface SceneOperator {
   type: OperatorType;
   label: string;
   sourceNodeId?: string;
+  sourceActorId?: string;
+  targetActorId?: string;
+  channel?: CommunicationChannel;
   target: SceneReference;
+  influence?: TransitionInfluence;
   epistemic: EpistemicState;
 }
 
@@ -139,6 +174,24 @@ export interface Scene {
   timeline?: TemporalEvent[];
 }
 
+export interface OperatorInfluenceEvaluation {
+  operatorId: string;
+  label: string;
+  channel: CommunicationChannel;
+  reality: CostReality;
+  direction: InfluenceDirection;
+  delta: number;
+}
+
+export interface TransitionFieldEvaluation {
+  moveId: string;
+  actualDelta: number;
+  expectedDelta: number;
+  netDelta: number;
+  contributions: OperatorInfluenceEvaluation[];
+  byChannel: Partial<Record<CommunicationChannel, number>>;
+}
+
 export type MoveStatus = "clean" | "sanctioned" | "blocked";
 
 export interface MoveEvaluation {
@@ -147,6 +200,7 @@ export interface MoveEvaluation {
   effectiveCost: number;
   sanctions: SceneNode[];
   closedGates: SceneNode[];
+  transitionField: TransitionFieldEvaluation;
   reasons: string[];
 }
 

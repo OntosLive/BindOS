@@ -1,3 +1,4 @@
+import { evaluateTransitionField } from "./channels";
 import type {
   MoveEvaluation,
   Scene,
@@ -33,21 +34,30 @@ export function evaluateMove(scene: Scene, move: SceneMove): MoveEvaluation {
     .filter(
       (node): node is SceneNode =>
         Boolean(node) &&
-        node?.type === "Gate" &&
+        node.type === "Gate" &&
         node.metadata?.gateStatus === "closed",
     );
 
-  const effectiveCost = sanctions.reduce((sum, node) => sum + severity(node), 0);
+  const sanctionCost = sanctions.reduce(
+    (sum, node) => sum + severity(node),
+    0,
+  );
+  const transitionField = evaluateTransitionField(scene, move.id);
+  const effectiveCost = Math.max(
+    0,
+    sanctionCost + transitionField.netDelta,
+  );
+
   const status = closedGates.length
     ? "blocked"
-    : sanctions.length
+    : effectiveCost > 0
       ? "sanctioned"
       : "clean";
 
-  const reasons = [
-    ...closedGates.map((gate) => `gate closed: ${gate.label}`),
-    ...sanctions.map((sanction) => `sanction: ${sanction.label}`),
-  ];
+  const fieldReasons = transitionField.contributions.map((item) => {
+    const sign = item.delta >= 0 ? "+" : "";
+    return `${item.reality} ${item.channel}: ${sign}${item.delta.toFixed(1)} · ${item.label}`;
+  });
 
   return {
     move,
@@ -55,7 +65,12 @@ export function evaluateMove(scene: Scene, move: SceneMove): MoveEvaluation {
     effectiveCost,
     sanctions,
     closedGates,
-    reasons,
+    transitionField,
+    reasons: [
+      ...closedGates.map((gate) => `gate closed: ${gate.label}`),
+      ...sanctions.map((sanction) => `sanction: ${sanction.label}`),
+      ...fieldReasons,
+    ],
   };
 }
 
@@ -69,7 +84,6 @@ function hasRuleConflict(scene: Scene): boolean {
       .filter((node) => node.type === "Rule" || node.type === "MetaRule")
       .map((node) => node.id),
   );
-
   return scene.edges.some(
     (edge) =>
       edge.type === "contradicts" &&
@@ -88,7 +102,6 @@ function hasInterpreterAttack(scene: Scene): boolean {
 
 function hasRecursiveCycle(scene: Scene): boolean {
   const adjacency = new Map<string, string[]>();
-
   for (const edge of scene.edges) {
     if (!recursiveEdgeTypes.has(edge.type)) continue;
     const list = adjacency.get(edge.from) ?? [];
@@ -102,7 +115,6 @@ function hasRecursiveCycle(scene: Scene): boolean {
   const visit = (id: string): boolean => {
     if (visiting.has(id)) return true;
     if (visited.has(id)) return false;
-
     visiting.add(id);
     for (const next of adjacency.get(id) ?? []) {
       if (visit(next)) return true;
@@ -119,7 +131,6 @@ function gateOpen(scene: Scene, type: "meta" | "exit"): boolean {
   const matching = scene.nodes.filter(
     (node) => node.type === "Gate" && node.metadata?.gateType === type,
   );
-
   if (!matching.length) return false;
   return matching.some((node) => node.metadata?.gateStatus === "open");
 }
@@ -151,7 +162,8 @@ export function analyzeScene(scene: Scene): SceneAnalysis {
     return {
       classification: "ordinary",
       label: "Обычная сцена",
-      explanation: "Формального конфликта активных правил не найдено.",
+      explanation:
+        "Формального конфликта активных правил не найдено. Отдельные переходы при этом могут иметь высокую ожидаемую стоимость.",
       hasRuleConflict: false,
       hasRecursiveCycle: recursiveCycle,
       hasInterpreterAttack: interpreterAttack,
