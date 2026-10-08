@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BindOS · Атлас отношений</title>
+<meta name="description" content="BindOS: сущность, отношение, оператор, канал, вес. Интерактивный атлас типов и связей.">
+<style>
+:root{color-scheme:light dark;font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:Canvas;color:CanvasText}
+main{max-width:910px;padding:38px 24px 100px;margin:auto}
+header{border-bottom:1px solid #9996;padding-bottom:20px}h1{font-size:clamp(30px,5vw,48px);letter-spacing:-.04em;margin:0 0 4px}h2{font-size:24px;margin:34px 0 14px}h3{font-size:18px;margin:12px 0}.muted,small{color:GrayText}p{line-height:1.65}a{color:LinkText}nav{display:flex;gap:18px;margin-top:14px;flex-wrap:wrap;font-size:14px}
+section{margin-top:30px}.panel{border:1px solid #8886;border-radius:10px;padding:20px}
+button{font:inherit;padding:8px 11px;background:transparent;border:1px solid #8888;border-radius:7px;color:inherit;cursor:pointer}
+button:hover,button[aria-pressed=true]{background:ButtonFace;border-color:currentColor}button:focus-visible,a:focus-visible{outline:2px solid LinkText;outline-offset:3px}
+.chips{display:flex;gap:8px;flex-wrap:wrap} .details{margin-top:15px;min-height:110px}
+table{width:100%;border-collapse:collapse;font-size:15px}td,th{text-align:left;vertical-align:top;padding:12px 7px;border-bottom:1px solid #8884}
+.edge{font-size:13px;color:GrayText} .route{display:block;padding:12px 0;border-bottom:1px solid #8884}
+.svgmap{display:block;width:100%;height:auto;max-height:380px;overflow:visible}
+.svgmap .link{stroke:currentColor;stroke-opacity:.35;stroke-width:1.4}
+.svgmap .node{fill:Canvas;stroke:currentColor;stroke-opacity:.55}
+.svgmap .node.active{fill:ButtonFace;stroke:LinkText;stroke-width:2}
+.svgmap text{fill:CanvasText;font-size:12px;pointer-events:none}
+.mapbutton{cursor:pointer;outline:none}.mapbutton:focus-visible .node{stroke:LinkText;stroke-width:3}
+.eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:GrayText}
+footer{margin-top:55px;border-top:1px solid #8886;padding-top:16px;font-size:13px;color:GrayText}
+@media(max-width:620px){main{padding:22px 15px 70px}.panel{padding:13px}table{font-size:13px}td,th{padding:10px 4px}}
+</style>
+</head>
+<body><main>
+<header><div class="eyebrow">BindOS / Исследовательская поверхность 0.1</div><h1>Атлас отношений</h1>
+<p>Не изображение графа, а переход между объектом, отношением и правилом, которое действует на отношение.</p>
+<nav><a href="#primitives">Примитивы</a><a href="#graph">Граф</a><a href="#levels">Логические типы</a><a href="#routes">Маршруты</a><a href="https://github.com/OntosLive/BindOS">Репозиторий</a></nav></header>
+<section id="primitives"><h2>Пять примитивов</h2><div class="chips" id="primitiveButtons"></div><div class="panel details" id="primitiveDetail" aria-live="polite"></div></section>
+<section id="graph"><h2>Связи как утверждения</h2><p class="muted">Выбери узел. Направление ребра означает направление утверждения, не превосходство.</p>
+<div class="panel"><svg class="svgmap" id="graphSvg" viewBox="0 0 780 325" role="group" aria-label="Интерактивная карта объектов и отношений"></svg><div id="nodeDetails" class="details" aria-live="polite"></div></div></section>
+<section id="levels"><h2>Логический тип определяется целью операции</h2><p>Объект сцены сам по себе не становится «выше», когда его называют метаправилом. Следующий тип возникает, когда оператор действует на отношение или на другой оператор.</p>
+<table><thead><tr><th>Тип</th><th>Объект</th><th>Действие</th></tr></thead><tbody>
+<tr><td>τ0</td><td>Событие А, событие Б</td><td>Объекты сцены</td></tr>
+<tr><td>τ1</td><td>А связано с Б</td><td>Отношение между объектами</td></tr>
+<tr><td>τ2</td><td>Оператор над связью</td><td>Меняет допустимость или силу отношения</td></tr>
+<tr><td>τ3</td><td>Оператор над оператором</td><td>Меняет правило применения предыдущего оператора</td></tr>
+</tbody></table><p class="muted">Это исполнимая договорённость BindOS о представлении логических типов, не буквальная реконструкция всей теории Рассела.</p></section>
+<section id="routes"><h2>Пути исследования</h2><div class="panel">
+<a class="route" href="#graph" data-select="a"><strong>Событие → отношение</strong><br><span class="edge">От наблюдаемого объекта к утверждению о связи.</span></a>
+<a class="route" href="#graph" data-select="relation"><strong>Отношение → оператор</strong><br><span class="edge">От того, что связывает, к правилу действия на связь.</span></a>
+<a class="route" href="#graph" data-select="operator"><strong>Оператор → метаоператор</strong><br><span class="edge">От правила к правилу о применимости самого правила.</span></a>
+</div></section>
+<footer>BindOS · Наблюдаемое ≠ выведенное ≠ предложенное. Демонстрационная модель; каноническое ядро репозитория не изменено.</footer>
+</main>
+<script>
+"use strict";
+const primitives=[
+["Сущность","То, что может участвовать в сцене. Не обязано быть человеком: событие и правило тоже могут иметь адрес."],
+["Отношение","Типизированная направленная или ненаправленная связь между сущностями. Связь является утверждением, а не декоративной линией."],
+["Оператор","Действие над сущностью, отношением, ходом или другим оператором. Цель определяет вычисляемый логический ранг."],
+["Канал","Среда проведения воздействия: текст, голос, жест, пространство, институциональное предписание."],
+["Вес","Сила воздействия, стоимость перехода, проводимость, усиление или ослабление действия."]
+];
+const nodes=[
+{id:"a",label:"Событие A",x:110,y:125,kind:"Сущность",note:"Наблюдаемое событие в сцене. τ0."},
+{id:"b",label:"Событие Б",x:335,y:125,kind:"Сущность",note:"Второе событие в сцене. τ0."},
+{id:"relation",label:"Отношение",x:220,y:35,kind:"Отношение",note:"Направленное утверждение A → Б. τ1. Не просто соседство на схеме."},
+{id:"operator",label:"Оператор",x:540,y:35,kind:"Оператор",note:"Оператор действует на отношение A → Б. Вычисляемый тип τ2."},
+{id:"meta",label:"Метаоператор",x:650,y:180,kind:"Оператор",note:"Действует на оператор над отношением. Вычисляемый тип τ3."},
+{id:"channel",label:"Канал",x:105,y:267,kind:"Канал",note:"Способ передачи влияния. Не логический тип."},
+{id:"weight",label:"Вес",x:435,y:267,kind:"Вес",note:"Сила и стоимость перехода. Не логический тип."}
+];
+const links=[["a","b","связано с"],["relation","a","источник"],["relation","b","цель"],["operator","relation","действует на"],["meta","operator","действует на"],["channel","operator","передаёт"],["weight","operator","взвешивает"]];
+const get=id=>nodes.find(n=>n.id===id);
+let selected="relation";
+function showPrimitive(i){
+ document.querySelectorAll("#primitiveButtons button").forEach((b,j)=>b.setAttribute("aria-pressed",String(i===j)));
+ document.getElementById("primitiveDetail").innerHTML="<h3>"+primitives[i][0]+"</h3><p>"+primitives[i][1]+"</p>";
+}
+primitives.forEach((p,i)=>{const b=document.createElement("button");b.textContent=p[0];b.type="button";b.onclick=()=>showPrimitive(i);document.getElementById("primitiveButtons").append(b)});showPrimitive(0);
+function render(){
+ const svg=document.getElementById("graphSvg");svg.replaceChildren();
+ const ns="http://www.w3.org/2000/svg";
+ const el=(tag,attributes,parent)=>{let e=document.createElementNS(ns,tag);Object.entries(attributes).forEach(([k,v])=>e.setAttribute(k,v));parent.append(e);return e};
+ const defs=el("defs",{},svg);const marker=el("marker",{id:"arrow",viewBox:"0 0 10 10",refX:"9",refY:"5",markerWidth:"6",markerHeight:"6",orient:"auto-start-reverse"},defs);
+ el("path",{d:"M0 0L10 5L0 10Z",fill:"currentColor","fill-opacity":".4"},marker);
+ links.forEach(([from,to,label])=>{const a=get(from),b=get(to);el("line",{x1:a.x,y1:a.y,x2:b.x,y2:b.y,class:"link","marker-end":"url(#arrow)"},svg)});
+ nodes.forEach(n=>{let g=el("g",{class:"mapbutton",tabindex:"0",role:"button","aria-label":"Открыть узел: "+n.label},svg);
+ el("rect",{x:n.x-67,y:n.y-22,width:134,height:44,rx:9,class:"node"+(selected===n.id?" active":"")},g);
+ const t=el("text",{x:n.x,y:n.y+4,"text-anchor":"middle"},g);t.textContent=n.label;
+ g.addEventListener("click",()=>choose(n.id));g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();choose(n.id)}})});
+ const n=get(selected),incoming=links.filter(l=>l[1]===selected),outgoing=links.filter(l=>l[0]===selected);
+ document.getElementById("nodeDetails").innerHTML="<h3>"+n.label+"</h3><p>"+n.note+"</p><p class='edge'>Тип: "+n.kind+" · Исходящие: "+outgoing.length+" · Входящие: "+incoming.length+"</p>";
+}
+function choose(id){selected=id;render();}
+document.querySelectorAll("[data-select]").forEach(a=>a.addEventListener("click",()=>choose(a.dataset.select)));
+render();
+</script></body></html>
