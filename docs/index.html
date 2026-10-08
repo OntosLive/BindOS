@@ -11,7 +11,7 @@ main{max-width:910px;padding:38px 24px 100px;margin:auto}
 header{border-bottom:1px solid #9996;padding-bottom:20px}h1{font-size:clamp(30px,5vw,48px);letter-spacing:-.04em;margin:0 0 4px}h2{font-size:24px;margin:34px 0 14px}h3{font-size:18px;margin:12px 0}.muted,small{color:GrayText}p{line-height:1.65}a{color:LinkText}nav{display:flex;gap:18px;margin-top:14px;flex-wrap:wrap;font-size:14px}
 section{margin-top:30px}.panel{border:1px solid #8886;border-radius:10px;padding:20px}
 button{font:inherit;padding:8px 11px;background:transparent;border:1px solid #8888;border-radius:7px;color:inherit;cursor:pointer}
-button:hover,button[aria-pressed=true]{background:ButtonFace;border-color:currentColor}button:focus-visible,a:focus-visible{outline:2px solid LinkText;outline-offset:3px}
+button:disabled{opacity:.4;cursor:default}button:hover,button[aria-pressed=true]{background:ButtonFace;border-color:currentColor}button:focus-visible,a:focus-visible{outline:2px solid LinkText;outline-offset:3px}
 .chips{display:flex;gap:8px;flex-wrap:wrap} .details{margin-top:15px;min-height:110px}
 table{width:100%;border-collapse:collapse;font-size:15px}td,th{text-align:left;vertical-align:top;padding:12px 7px;border-bottom:1px solid #8884}
 .edge{font-size:13px;color:GrayText} .route{display:block;padding:12px 0;border-bottom:1px solid #8884}
@@ -30,6 +30,8 @@ footer{margin-top:55px;border-top:1px solid #8886;padding-top:16px;font-size:13p
 <header><div class="eyebrow">BindOS / Исследовательская поверхность 0.1</div><h1>Атлас отношений</h1>
 <p>Не изображение графа, а переход между объектом, отношением и правилом, которое действует на отношение.</p>
 <nav><a href="#primitives">Примитивы</a><a href="#graph">Граф</a><a href="#levels">Логические типы</a><a href="#routes">Маршруты</a><a href="https://github.com/OntosLive/BindOS">Репозиторий</a></nav></header>
+<section aria-labelledby="guide-title"><h2 id="guide-title">Как здесь исследовать</h2><p>Начни не с определения, а с ситуации: <strong>«Мне говорят: сначала расставь приоритеты».</strong> Можно принять требование. А можно выяснить, какие задачи от каких решений зависят и кто установил само правило приоритета.</p>
+<div class="panel" id="guide" aria-live="polite"><div class="eyebrow">Сопровождение · шаг <span id="stepNumber">1</span> из 4</div><h3 id="stepTitle">Объект</h3><p id="stepText">Назови то, что произошло: прозвучало требование расставить приоритеты. Это пока наблюдаемое событие, а не его объяснение.</p><div class="chips"><button id="prevStep" type="button" disabled>Назад</button><button id="nextStep" type="button">Следующий ход →</button></div></div></section>
 <section id="primitives"><h2>Пять примитивов</h2><div class="chips" id="primitiveButtons"></div><div class="panel details" id="primitiveDetail" aria-live="polite"></div></section>
 <section id="graph"><h2>Связи как утверждения</h2><p class="muted">Выбери узел. Направление ребра означает направление утверждения, не превосходство.</p>
 <div class="panel"><svg class="svgmap" id="graphSvg" viewBox="0 0 780 325" role="group" aria-label="Интерактивная карта объектов и отношений"></svg><div id="nodeDetails" class="details" aria-live="polite"></div></div></section>
@@ -49,6 +51,25 @@ footer{margin-top:55px;border-top:1px solid #8886;padding-top:16px;font-size:13p
 </main>
 <script>
 "use strict";
+const guideSteps=[
+["Объект","Назови то, что произошло: прозвучало требование расставить приоритеты. Это наблюдаемое событие, а не его объяснение.","a"],
+["Отношение","Теперь спроси: какие задачи зависят от других? Продажи, канал и решение о существовании бизнеса не просто стоят рядом в списке.","relation"],
+["Оператор","Правило «сначала расставить приоритеты» действует на выбор действий. Но пригодно ли оно, если часть задач должна быть отменена более общим решением?","operator"],
+["Метаоператор","Подними вопрос на уровень выше: кто установил правило приоритизации и при каких условиях его можно пересмотреть?","meta"]
+];
+let guideIndex=0;
+function updateGuide(){
+const [title,body,node]=guideSteps[guideIndex];
+document.getElementById("stepNumber").textContent=String(guideIndex+1);
+document.getElementById("stepTitle").textContent=title;
+document.getElementById("stepText").textContent=body;
+document.getElementById("prevStep").disabled=guideIndex===0;
+document.getElementById("nextStep").disabled=guideIndex===guideSteps.length-1;
+document.getElementById("nextStep").textContent=guideIndex===guideSteps.length-1?"Маршрут завершён":"Следующий ход →";
+choose(node);
+}
+document.getElementById("prevStep").addEventListener("click",()=>{if(guideIndex>0){guideIndex--;updateGuide()}});
+document.getElementById("nextStep").addEventListener("click",()=>{if(guideIndex<guideSteps.length-1){guideIndex++;updateGuide()}});
 const primitives=[
 ["Сущность","То, что может участвовать в сцене. Не обязано быть человеком: событие и правило тоже могут иметь адрес."],
 ["Отношение","Типизированная направленная или ненаправленная связь между сущностями. Связь является утверждением, а не декоративной линией."],
@@ -89,5 +110,5 @@ function render(){
 }
 function choose(id){selected=id;render();}
 document.querySelectorAll("[data-select]").forEach(a=>a.addEventListener("click",()=>choose(a.dataset.select)));
-render();
+render();updateGuide();
 </script></body></html>
