@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Щелкунчик BindOS: шесть коротких шагов от запутанной ситуации к различению её правил и доступных ходов.">
+<title>Щелкунчик · BindOS</title>
+<style>
+:root{color-scheme:light dark;--ink:CanvasText;--paper:Canvas;--link:LinkText;--muted:GrayText;--rule:color-mix(in srgb, CanvasText 25%, transparent);--faint:color-mix(in srgb, CanvasText 5%, Canvas);--mark:color-mix(in srgb, CanvasText 10%, Canvas)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+a{color:var(--link);text-underline-offset:3px}button,input,textarea{font:inherit}button{color:inherit;background:var(--paper);border:1px solid var(--rule);border-radius:7px;padding:10px 13px;cursor:pointer;text-align:left}button:hover:not(:disabled){background:var(--faint)}button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--link);outline-offset:3px}button:disabled{cursor:default;opacity:.43}button[aria-current="step"]{border-color:var(--ink);font-weight:700;background:var(--faint)}
+.shell{max-width:1460px;padding:20px clamp(18px,3vw,48px) 90px;margin:auto}
+.top{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center;border-bottom:1px solid var(--rule);padding:2px 0 15px}.brand{font:bold 25px/1.2 Georgia,"Times New Roman",serif}.top nav{display:flex;flex-wrap:wrap;gap:17px;font-size:13px}
+.hero{padding:43px 0 28px;max-width:1100px}.eyebrow{font:750 11px/1.5 system-ui,sans-serif;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}h1{font:700 clamp(44px,6.7vw,103px)/.99 Georgia,"Times New Roman",serif;letter-spacing:-.06em;margin:8px 0 22px}h2{font:700 clamp(25px,2.7vw,40px)/1.12 Georgia,serif;letter-spacing:-.025em;margin:8px 0 17px}h3{font-size:19px;margin:7px 0 13px}.lead{font-size:clamp(18px,1.65vw,24px);line-height:1.48;margin:0 0 12px;max-width:880px}.quiet,.muted{color:var(--muted)}.quiet{font-size:14px}
+.layout{display:grid;grid-template-columns:minmax(190px,.88fr) minmax(420px,2.35fr) minmax(235px,1fr);gap:14px;align-items:start}.pane{border:1px solid var(--rule);border-radius:9px;padding:22px;min-width:0}.sidebar{position:sticky;top:15px}.sidebar h2{font-size:22px}.levelnav{display:grid;gap:6px;margin-top:15px}.levelnav button{display:flex;align-items:center;gap:11px;width:100%}.num{font:700 14px/1.3 ui-monospace,monospace;min-width:27px}.levelnav button:disabled .num{opacity:.65}.small{font-size:13px}.sidebar .small{margin-top:20px}
+.progress{border:1px solid var(--rule);height:5px;border-radius:5px;overflow:hidden;margin:16px 0 8px}.progress>div{height:100%;background:var(--ink);width:0;transition:width .2s}
+.case{font:22px/1.38 Georgia,serif;border-left:3px solid var(--ink);padding:9px 0 9px 17px;margin:22px 0}.question{font-weight:700;font-size:19px}.answers{display:grid;gap:9px;margin:20px 0}.answers button{width:100%;padding:13px 15px}.answers button.selected{border:2px solid var(--ink);padding:12px 14px}.response{border-top:1px solid var(--rule);padding:18px 0 3px;min-height:102px}.response strong{display:block}.response p{margin:7px 0}.response[data-kind="retry"]{border-left:3px solid var(--ink);padding-left:14px}.response[data-kind="right"]{background:var(--faint);padding:18px;border-radius:5px}.stepsControls{display:flex;gap:10px;flex-wrap:wrap;margin-top:19px}
+.under{border-top:1px solid var(--rule);margin-top:20px;padding-top:13px}.under summary{cursor:pointer;font-weight:600}.under p{font-size:14px}.rightPane h3{font:700 24px Georgia,serif}.miniTitle{color:var(--muted);font:750 11px system-ui;letter-spacing:.08em;text-transform:uppercase;margin-top:18px}.change{font-size:14px;border-bottom:1px solid var(--rule);padding-bottom:12px}.rightPane .change{margin-top:4px}.term{display:inline-block;border:1px solid var(--rule);border-radius:4px;font-size:12px;padding:2px 7px;margin-top:10px}
+.section{margin-top:35px}.section h2{font-size:32px}.panelSoft{background:var(--faint);padding:18px;border-radius:8px}.simgrid{display:grid;grid-template-columns:1.1fr 1fr;gap:18px}.controls label{display:block;margin:13px 0;line-height:1.4}.controls input{width:17px;height:17px;vertical-align:middle;margin-right:7px}.readout{border-left:2px solid var(--ink);padding-left:17px}.readout h3{margin-top:5px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}.cardgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.cardgrid article{border-top:2px solid var(--ink);padding-top:10px}.cardgrid h3{font:700 22px Georgia,serif}.cardgrid p{font-size:14px}.worksheet{display:grid;gap:12px}.worksheet label{display:block;font-weight:650}.worksheet textarea{display:block;width:100%;margin-top:5px;padding:10px 12px;border:1px solid var(--rule);border-radius:7px;background:var(--paper);color:var(--ink);resize:vertical;min-height:62px}.hint{font-size:13px;color:var(--muted)}
+footer{margin-top:45px;padding-top:16px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+@media(max-width:1150px){.layout{grid-template-columns:210px minmax(0,1fr)}.rightPane{grid-column:2}.sidebar{top:8px}}@media(max-width:710px){.hero{padding:25px 0 18px}.layout{display:block}.pane{margin-bottom:13px;padding:18px}.sidebar{position:static}.levelnav{grid-template-columns:repeat(2,minmax(0,1fr))}.levelnav button{font-size:13px}.rightPane{display:block}.simgrid{display:block}.readout{margin-top:22px}.cardgrid{display:block}.cardgrid article{margin-bottom:23px}.case{font-size:20px}h1{font-size:clamp(41px,12vw,75px)}}
+</style>
+</head>
+<body>
+<div class="shell">
+<div class="top"><span class="brand">BindOS / Щелкунчик</span><nav aria-label="Разделы проекта"><a href="../">Атлас</a><a href="../laboratory/">Лаборатория</a><a href="../research/">Исследования</a><a href="https://ontoslive.github.io/Ontos.Times/wide/">ONTOS.TIMES</a></nav></div>
+<header class="hero">
+<div class="eyebrow">Первая самостоятельная игра в различение · Выпуск 0.1</div>
+<h1>Щелкунчик.</h1>
+<p class="lead">Не обязательно сразу разбираться в своей жизни. Для начала научись отличать событие от догадки, требование от правила, а задачу от чужого способа её поставить.</p>
+<p class="quiet">Шесть коротких упражнений на вымышленных ситуациях. Никаких диагнозов, оценок личности и необходимости рассказывать о себе. Ошибка означает только ещё одну попытку различить.</p>
+</header>
+<div class="layout" id="game">
+<aside class="pane sidebar"><div class="eyebrow">Маршрут</div><h2>Шесть щелчков</h2><div id="progress" class="progress" role="progressbar" aria-label="Освоенные шаги" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"><div id="fill"></div></div><p class="small muted" id="progressLabel">Освоено 0 из 6</p><nav class="levelnav" id="levelNav" aria-label="Уровни Щелкунчика"></nav><p class="small">Дальше открывается после верного различения. Можно вернуться к любому уже освоенному шагу.</p><button id="openAll" type="button" class="small">Открыть весь маршрут исследователю</button></aside>
+<main class="pane"><div class="eyebrow" id="stageMarker">Уровень 01 / 06</div><h2 id="stageTitle">Что произошло?</h2><p class="quiet" id="stageLead"></p><div class="case" id="stageScene"></div><p class="question" id="stageQuestion"></p><div class="answers" id="choices" role="group" aria-label="Выбрать различение"></div><div class="response" id="response" aria-live="polite"><strong>Начни с одного различения.</strong><p>Выбери то утверждение, которое лучше соответствует данным сцены.</p></div><div class="stepsControls"><button type="button" id="back" disabled>← Назад</button><button type="button" id="next" disabled>Следующий уровень →</button></div><details class="under"><summary>Что именно делает операция?</summary><p id="formal"></p></details></main>
+<aside class="pane rightPane"><div class="eyebrow">Метакомментарий</div><h3>Как читать происходящее</h3><p class="quiet" id="reading"></p><div class="miniTitle">До различения</div><p class="change" id="before"></p><div class="miniTitle">После различения</div><p class="change" id="after"></p><span class="term" id="operator"></span><p class="hint">Это обучающие операции над моделью. Оператор здесь не человек и не тот, кто отдаёт приказ.</p></aside>
+</div>
+<section class="section" id="simulation"><div class="eyebrow">Исследование после упражнений · Доступно сразу</div><h2>Парадокс: ловушка или приглашение?</h2><p>Меняй условия. Здесь нет скрытого «правильного человека». Мы сравниваем две конфигурации правил и возможностей. Обсуждение, внешняя опора и уход представляют разные операции.</p>
+<div class="pane simgrid"><div class="controls"><div class="eyebrow">Параметры условной сцены</div>
+<label><input type="checkbox" id="same" checked>Оба требования относятся к одному действию и одному моменту</label>
+<label><input type="checkbox" id="meta">Можно назвать и обсудить сами правила</label>
+<label><input type="checkbox" id="leave">Можно отказаться от участия</label>
+<label><input type="checkbox" id="anchor">Есть независимая опора за пределами отношений</label>
+<label><input type="checkbox" id="sanction" checked>За нарушение предусмотрены существенные издержки</label>
+<div class="actions"><button type="button" id="simReset">Вернуть исходные условия</button></div></div>
+<div class="readout"><div class="eyebrow">Пересчёт сцены</div><h3 id="simTitle"></h3><p id="simText"></p><div class="miniTitle">Различение</div><p id="simMeta"></p></div></div></section>
+<section class="section"><div class="eyebrow">Карта после первого прохождения</div><h2>Не шесть разновидностей человека. Шесть операций мышления.</h2>
+<div class="cardgrid"><article><h3>Увидеть</h3><p>Отделить наблюдаемое от рассказа о нём. Вернуть предмет исследования.</p></article><article><h3>Проверить</h3><p>Найти предписания, области их действия, ограничения и доступные ходы.</p></article><article><h3>Пересобрать</h3><p>Сделать правило объектом обсуждения, найти независимую опору или отказаться от самой задачи.</p></article></div></section>
+<section class="section" id="own"><div class="eyebrow">Необязательное продолжение · Без отправки на сервер</div><h2>Своя сцена. Без обязательной интерпретации.</h2><p>Можно вручную отделить три слоя описания. Это не автоматический анализ, здесь пока нет подключения LLM. Записи не сохраняются на сервере и исчезнут при закрытии или обновлении страницы, если не скопировать их самостоятельно.</p>
+<div class="pane"><div class="worksheet"><label for="wFact">Что я действительно наблюдал?<textarea id="wFact" placeholder="Точные слова, события, последовательность действий"></textarea></label><label for="wGuess">Какую интерпретацию я построил?<textarea id="wGuess" placeholder="Моё объяснение, пока ещё не установленный факт"></textarea></label><label for="wRule">Какое правило или обязательство я предполагаю?<textarea id="wRule" placeholder="Кто, чего и при каких обстоятельствах ожидает"></textarea></label><label for="wMeta">Какой следующий вопрос можно проверить?<textarea id="wMeta" placeholder="Что нужно уточнить о правиле, его границе или опоре"></textarea></label></div><div class="actions"><button type="button" id="copy">Скопировать мою карту</button><button type="button" id="clear">Очистить записи</button></div><p class="hint" id="copyState" role="status">Карточка существует только в этом окне браузера.</p></div></section>
+<footer>BindOS · «Щелкунчик» является учебной поверхностью, а не диагностикой отношений. Канонические пять примитивов остаются без изменений. Открытые вопросы и живую речь можно исследовать дальше в <a href="../research/">атласе исследований</a>.</footer>
+</div>
+<script>
+"use strict";
+const levels=[
+{
+name:"Факт или версия",heading:"Что произошло?",lead:"Первая скорлупа обычно возникает раньше всяких сложных правил: мы уже знаем, что произошло, хотя пока знаем только одну часть.",
+scene:"Ты написал человеку сообщение. На экране видно: прошло два часа, ответа в переписке нет.",
+question:"Какое утверждение здесь непосредственно наблюдается?",
+answers:["Он специально меня игнорирует.","В переписке нет ответа уже два часа.","Я ему не нужен, поэтому он молчит."],correct:1,
+wrong:"Это объяснение возможного мотива, а не то, что прямо установлено по переписке.",
+right:"Теперь у нас есть событие, а не готовый рассказ о чужом намерении. Из него можно начать исследование.",
+reading:"Не запрещаем себе чувствовать. Просто не выдаём догадку за наблюдаемый факт.",
+before:"Молчание сразу кажется сообщением о твоей значимости.",after:"Есть факт отсутствия ответа и несколько пока не проверенных объяснений.",
+operation:"Операция: отделить наблюдаемое",formal:"Введи событие как подтверждённый объект. Его интерпретации должны оставаться отдельными утверждениями с иным статусом."
+},
+{
+name:"Увидеть требования",heading:"Чего от тебя требуют?",lead:"Сложная сцена иногда звучит как одна непрерывная претензия. Попробуем услышать в ней отдельные правила.",
+scene:"Руководитель говорит: «Принимай решения самостоятельно». Затем: «Любое решение сначала согласовывай со мной».",
+question:"Что мы можем выписать, не додумывая скрытых мотивов?",
+answers:["Два произнесённых требования о принятии решения.","Он хочет контролировать меня и потому врёт.","Мне необходимо срочно разорвать отношения."],correct:0,
+wrong:"Это уже догадка о намерении или готовое решение, а мы пока выделяем сами предписания.",
+right:"Теперь у нас не один непонятный конфликт, а два отдельных утверждения, которые можно сопоставить.",
+reading:"Правило не равно личности того, кто его произносит.",
+before:"«Что бы я ни делал, всё неправильно».",after:"Есть требование самостоятельности и требование согласования.",
+operation:"Операция: выделить предписания",formal:"Построй два отношения типа «требует», с явными областями применения. Мотивы участника не следуют из факта предъявления требований."
+},
+{
+name:"Проверить совместимость",heading:"Это вообще противоречие?",lead:"Два разных указания ещё не обязаны быть несовместимы. Сначала проверяем условия.",
+scene:"«Выбирай репертуар самостоятельно. А расходы свыше бюджета согласовывай».",
+question:"Действительно ли эти правила противоречат друг другу?",
+answers:["Да, потому что здесь присутствуют самостоятельность и согласование.","Не обязательно: правила относятся к разным решениям.","Любое требование согласования делает самостоятельность фикцией."],correct:1,
+wrong:"Посмотри не на одинаковые слова, а на предмет, время и область действия каждого правила.",
+right:"Верно. Условие конфликта нужно доказать, а не обнаружить по сходству слов.",
+reading:"Не каждый дискомфорт и не каждое двойное требование образуют двойную ловушку.",
+before:"Одинаковые слова «сам» и «согласуй» выглядят несовместимыми.",after:"Критично, относятся ли требования к одному действию в одинаковых условиях.",
+operation:"Операция: проверить область действия",formal:"Проверка противоречия требует сопоставить множество действий и ограничения для одного контекста. Разные области могут сосуществовать."
+},
+{
+name:"Найти замок",heading:"Что делает ловушку устойчивой?",lead:"Пусть требования действительно несовместимы. Но одного конфликта ещё мало, чтобы описать невозможность выхода.",
+scene:"Ты указываешь на несовместимость требований. В ответ: «Обсуждать это нельзя. Просто выполняй». За нарушение каждого требования следует санкция.",
+question:"Что добавилось к конфликту требований?",
+answers:["Запрет обсуждать сами правила и издержки нарушения.","Доказательство, что собеседник плохой человек.","Доказательство, что логический выход невозможен всегда."],correct:0,
+wrong:"Нельзя вывести характер человека или абсолютную невозможность любого выхода из одной сцены. Мы исследуем дополнительные ограничения.",
+right:"Конфликт теперь включает запрет метакоммуникации и санкции. Но практические пути ещё нужно исследовать.",
+reading:"Санкции и запрет разговора о правилах важны, но не равны автоматическому диагнозу человека.",
+before:"Кажется, что ты просто недостаточно правильно отвечаешь.",after:"Видно, какие ограничения действуют и на сам ответ, и на обсуждение правил.",
+operation:"Операция: обнаружить метаограничение",formal:"Отношения и операторы становятся предметом других операторов. Указание о запрете обсуждения действует не просто на поступок, а на возможность проверки правила."
+},
+{
+name:"Поднимись, не уходи",heading:"Что значит перейти уровнем выше?",lead:"Если разрешено обсуждать требования, можно исследовать их условия. Это ещё не физический уход.",
+scene:"Оба требования действуют на одно решение, но участники согласны уточнить, когда самостоятельность означает свободу, а когда требуется согласование.",
+question:"Какой ход меняет рамку, а не просто выбирает одну из двух команд?",
+answers:["Сильнее стараться угадать, что хотели услышать.","Уточнить и согласовать область действия каждого требования.","Сказать «я плохой сотрудник» и отказаться от любой инициативы."],correct:1,
+wrong:"Это остаётся попыткой справиться с прежними правилами, а не операцией над их применимостью.",
+right:"Метаход делает правила предметом переговоров. Он возможен не всегда, но отличается от очередной попытки угадать ответ.",
+reading:"Метауровень не делает человека автоматически правым и не обязывает продолжать отношения.",
+before:"Выбор между самостоятельностью и согласованием.",after:"Возможность изменить смысл, границы или порядок применения требований.",
+operation:"Операция: исследовать правила",formal:"Оператор применяется к отношению или другому оператору. Логический тип задаётся его целью, а не названием «высокий уровень»."
+},
+{
+name:"Независимая опора",heading:"Откуда берётся следующий ход?",lead:"Иногда понять ситуацию можно раньше, чем получить практическую свободу её менять.",
+scene:"Обсудить требования не удаётся. Уйти сейчас дорого. Но постепенно появляются собственная компетенция, другие контакты и возможные маршруты работы.",
+question:"Что действительно меняется при возникновении независимой опоры?",
+answers:["Запрет автоматически исчезает.","Снижается зависимость всех возможных действий от одной стороны.","Противоречие само доказывает, что надо оставаться."],correct:1,
+wrong:"Независимая опора не отменяет автоматически правил и не предписывает оставаться или уходить.",
+right:"Вот оно: ты можешь сохранить отношения, изменить их или выйти. Сама зависимость перестала быть единственной рамкой возможного.",
+reading:"Логическая независимость и практическая свобода различаются. Вторая часто требует времени и реальных ресурсов.",
+before:"Право выбора кажется полностью зависимым от текущих отношений.",after:"Появились альтернативные основания и возможные маршруты. Их стоимость ещё нужно проверить.",
+operation:"Операция: изменить зависимость",formal:"Наличие дополнительного ресурса изменяет достижимость состояний и стоимость переходов, не объявляя автоматически все отношения отменёнными."
+}
+];
+const $=id=>document.getElementById(id);const KEY="bindos_nutcracker_mastered_v1";
+let mastered=0,expert=false,current=0;
+try{const n=Number(localStorage.getItem(KEY));if(Number.isInteger(n)&&n>=0&&n<=levels.length)mastered=n;}catch(_){}
+function stageUnlocked(i){return expert||i<=mastered;}
+function selectStage(i){if(!stageUnlocked(i))return;current=i;render();}
+function renderNav(){const list=$("levelNav");list.replaceChildren();
+levels.forEach((level,i)=>{const b=document.createElement("button");b.type="button";b.disabled=!stageUnlocked(i);if(i===current)b.setAttribute("aria-current","step");
+const number=document.createElement("span");number.className="num";number.textContent=String(i+1).padStart(2,"0");
+const title=document.createElement("span");title.textContent=level.name;b.append(number,title);b.addEventListener("click",()=>selectStage(i));list.append(b)});
+$("progressLabel").textContent="Освоено "+mastered+" из "+levels.length;
+$("progress").setAttribute("aria-valuenow",String(mastered));$("fill").style.width=(mastered/levels.length*100)+"%";
+$("openAll").textContent=expert?"Маршрут исследователя открыт":"Открыть весь маршрут исследователю";
+$("openAll").disabled=expert;
+}
+function render(){const level=levels[current],done=current<mastered;
+$("stageMarker").textContent="Уровень "+String(current+1).padStart(2,"0")+" / 06";
+$("stageTitle").textContent=level.heading;$("stageLead").textContent=level.lead;
+$("stageScene").textContent=level.scene;$("stageQuestion").textContent=level.question;
+$("reading").textContent=level.reading;$("before").textContent=level.before;$("after").textContent=done?level.after:"Откроется после выбранного различения.";
+$("operator").textContent=level.operation;$("formal").textContent=level.formal;
+const items=$("choices");items.replaceChildren();
+level.answers.forEach((answer,i)=>{const b=document.createElement("button");b.type="button";b.textContent=answer;if(done&&i===level.correct)b.classList.add("selected");
+b.addEventListener("click",()=>answerAt(i));items.append(b)});
+$("response").removeAttribute("data-kind");$("response").replaceChildren();
+const st=document.createElement("strong"),p=document.createElement("p");
+st.textContent=done?"Различение освоено.":current===0?"Начни с факта.":"Выбери наиболее точное утверждение.";
+p.textContent=done?level.right:"Не торопись. Здесь важна не скорость ответа, а граница между тем, что известно, и тем, что только предполагается.";
+$("response").append(st,p);if(done)$("response").dataset.kind="right";
+$("back").disabled=current===0;$("next").disabled=!done||current===levels.length-1;
+$("next").textContent=current===levels.length-1?"Маршрут пройден":"Следующий уровень →";
+renderNav();
+}
+function answerAt(i){const level=levels[current],isRight=i===level.correct;
+const box=$("response");box.dataset.kind=isRight?"right":"retry";box.replaceChildren();
+const head=document.createElement("strong");head.textContent=isRight?"Щёлкнуло.":"Пока скорлупа не раскрылась.";const p=document.createElement("p");p.textContent=isRight?level.right:level.wrong;box.append(head,p);
+if(isRight){if(current===mastered){mastered++;try{localStorage.setItem(KEY,String(mastered))}catch(_){}}$("after").textContent=level.after;
+const buttons=$("choices").querySelectorAll("button");buttons.forEach((b,j)=>{b.classList.toggle("selected",j===i)});
+$("next").disabled=current===levels.length-1;renderNav();
+if(current===levels.length-1){const end=document.createElement("p");end.textContent="Все шесть операций доступны. Ниже можно самостоятельно менять условия сцены или описать собственную ситуацию без отправки данных.";box.append(end);}
+}}
+$("back").addEventListener("click",()=>selectStage(current-1));
+$("next").addEventListener("click",()=>selectStage(current+1));
+$("openAll").addEventListener("click",()=>{expert=true;renderNav()});
+function simulate(){const same=$("same").checked,meta=$("meta").checked,leave=$("leave").checked,anchor=$("anchor").checked,sanction=$("sanction").checked;let title="",text="",explain="";
+if(!same){title="Установленного противоречия нет";text="Условия могут относиться к разным действиям или моментам. По этой модели ещё нельзя объявить требования несовместимыми.";explain="Сначала проверяем область действия. Только потом ищем метаход.";}
+else {const choices=[];if(meta)choices.push("обсудить и пересмотреть область требований");if(leave)choices.push("отказаться от участия");if(anchor)choices.push("найти дополнительный маршрут благодаря независимой опоре");
+title=choices.length?"Противоречие есть, но поле ходов шире":"Противоречие внутри исходных правил не разрешено";
+text=choices.length?"Потенциально доступны: "+choices.join("; ")+".":"В заданной модели оба требования конфликтуют, а явных операций над правилами или выходом пока не указано.";
+explain=anchor?"Независимая опора не отменяет требований. Она может снизить монополию одной связи над возможными решениями.":meta?"Обсуждение превращает требования в объект операции, а не просто создаёт ещё один ответ.":leave?"Формальный выход не тождествен простому или безопасному выходу.":"Не обнаружить ход в маленькой модели не означает доказать, что его нет в реальной жизни.";
+}
+if(sanction)explain+=" Издержки остаются самостоятельной переменной, даже когда действие логически возможно.";
+$("simTitle").textContent=title;$("simText").textContent=text;$("simMeta").textContent=explain;
+}
+["same","meta","leave","anchor","sanction"].forEach(id=>$(id).addEventListener("change",simulate));
+$("simReset").addEventListener("click",()=>{["same","sanction"].forEach(id=>$(id).checked=true);["meta","leave","anchor"].forEach(id=>$(id).checked=false);simulate()});
+const worksheet=[["wFact","Наблюдаемое"],["wGuess","Предположение"],["wRule","Предполагаемое правило"],["wMeta","Вопрос для проверки"]];
+$("copy").addEventListener("click",async()=>{const text="BindOS · Карта сцены\n\n"+worksheet.map(([id,label])=>label+":\n"+$(id).value.trim()).join("\n\n");
+try{await navigator.clipboard.writeText(text);$("copyState").textContent="Карта скопирована. На сервер ничего не отправлено.";}catch(e){$("copyState").textContent="Браузер не разрешил копирование. Можно выделить и скопировать текст вручную.";}}
+);
+$("clear").addEventListener("click",()=>{worksheet.forEach(([id])=>$(id).value="");$("copyState").textContent="Карточка очищена.";});
+render();simulate();
+</script>
+</body></html>
