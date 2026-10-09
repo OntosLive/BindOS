@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Щелкунчик II: метафора скорлупы, защита от собственной подтасовки и игровая матрица возможных ходов.">
+<title>Щелкунчик II · Скорлупа и матрица · BindOS</title>
+<style>
+:root{color-scheme:light dark;--ink:CanvasText;--paper:Canvas;--muted:GrayText;--line:color-mix(in srgb,CanvasText 25%,transparent);--soft:color-mix(in srgb,CanvasText 5%,Canvas);--bold:color-mix(in srgb,CanvasText 11%,Canvas)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}a{color:LinkText;text-underline-offset:3px}button,input,textarea{font:inherit}button{background:var(--paper);border:1px solid var(--line);border-radius:7px;padding:10px 14px;color:inherit;cursor:pointer}button:hover{background:var(--soft)}button:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid LinkText;outline-offset:3px}
+.site{max-width:1650px;margin:auto;padding:21px clamp(18px,3vw,53px) 85px}.top{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding:0 0 17px;gap:16px;flex-wrap:wrap}.top strong{font:700 25px Georgia,serif;letter-spacing:-.025em}.top nav{display:flex;flex-wrap:wrap;gap:15px;font-size:13px}.eyebrow{color:var(--muted);font-size:11px;font-weight:750;letter-spacing:.13em;text-transform:uppercase}.hero{padding:38px 0 22px}.hero h1{font:700 clamp(52px,7.7vw,125px)/.97 Georgia,"Times New Roman",serif;letter-spacing:-.065em;margin:12px 0 16px}.lead{font:24px/1.44 Georgia,serif;max-width:960px;margin:0 0 16px}.hero .quiet{max-width:920px}.quiet{color:var(--muted);font-size:14px}.fold{border-top:1px solid var(--line);margin:23px 0}.heading{display:flex;justify-content:space-between;gap:15px;align-items:baseline;flex-wrap:wrap;margin:0 0 17px}.heading h2{font:700 clamp(29px,3vw,47px)/1.15 Georgia,serif;letter-spacing:-.03em;margin:0}
+.metaphor{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.metaphor article{border:1px solid var(--line);padding:19px 20px;border-radius:7px;min-height:218px}.metaphor h3{font:700 30px Georgia,serif;margin:5px 0 12px}.metaphor p{max-width:40ch;margin:0}.symbol{display:block;font:35px Georgia,serif;line-height:1.1;opacity:.7}
+.columns{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:15px}.panel{border:1px solid var(--line);border-radius:8px;padding:20px;min-width:0}.panel h3{font:700 25px Georgia,serif;margin:3px 0 15px}.worksheet{display:grid;gap:14px}.worksheet label{font-weight:650;line-height:1.35;display:block}.worksheet textarea{display:block;width:100%;min-height:68px;padding:11px;border:1px solid var(--line);border-radius:7px;resize:vertical;margin-top:7px;background:var(--paper);color:var(--ink);line-height:1.45}.worksheet label small{display:block;color:var(--muted);font-weight:400;line-height:1.4;margin-top:5px}.controls{display:flex;flex-wrap:wrap;gap:9px;margin-top:17px}.display{border-top:1px solid var(--line);padding-top:11px;margin-top:13px}.cardline{margin:10px 0;padding:10px 0;border-bottom:1px solid var(--line)}.cardline strong{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}.cardline p{margin:5px 0;white-space:pre-wrap;overflow-wrap:anywhere}.honesty{background:var(--soft);padding:18px;border-radius:6px;margin-top:13px}.honesty h3{font:700 24px Georgia,serif;margin:0 0 8px}.honesty p{margin:7px 0}.slight{font-size:13px;color:var(--muted)}
+.matrixIntro{max-width:900px}.tableWrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px}.matrix{width:100%;border-collapse:collapse;table-layout:fixed;min-width:680px}.matrix th,.matrix td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px;vertical-align:middle}.matrix th:last-child,.matrix td:last-child{border-right:0}.matrix tr:last-child td,.matrix tr:last-child th{border-bottom:0}.matrix thead th{text-align:center;background:var(--soft);font-weight:650;font-size:14px}.matrix tbody th{text-align:left;font-size:15px;width:28%}.matrix tbody th small{font-weight:400;color:var(--muted);display:block;margin-top:6px}.matrix td{height:130px;padding:10px}.matrix td button{display:block;width:100%;height:100%;min-height:106px;text-align:left;padding:10px;line-height:1.3;border-color:transparent;border-radius:4px}.matrix td button[data-selected=true]{background:var(--bold);border-color:var(--ink)}.matrix td button:focus-visible{outline-offset:0}.matrix td .pair{font:700 28px Georgia,serif;display:block;margin:7px 0}.matrix td .pair span{font-size:15px;color:var(--muted)}.matrix td .hint{font-size:12px;color:var(--muted);display:block}.matrix td .eq{font-size:12px;font-weight:700}
+.matrixArea{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(280px,1fr);gap:15px;margin-top:16px}.matrixEditor{border:1px solid var(--line);border-radius:8px;padding:21px}.matrixEditor h3{font:700 25px Georgia,serif;line-height:1.13;margin:5px 0 12px}.matrixEditor label{display:block;margin:18px 0;font-size:14px}.matrixEditor input[type=range]{width:100%;margin:10px 0}.matrixEditor output{font-weight:750;font-variant-numeric:tabular-nums}.matrixEditor .pairNote{font-size:13px;color:var(--muted)}.matrixResult{padding:19px;background:var(--soft);border-radius:8px}.matrixResult h3{font:700 24px Georgia,serif;margin:5px 0 12px}.matrixResult p{font-size:14px;line-height:1.55}.matrixResult ul{padding-left:20px;font-size:14px}.rulebox{border-left:3px solid var(--ink);padding:3px 0 3px 16px;margin:17px 0;font:20px/1.5 Georgia,serif}
+.matrixOptions{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;margin:13px 0 16px}.matrixOptions label{font-size:15px}.matrixOptions input{vertical-align:middle;width:17px;height:17px;margin-right:6px}.detailGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.detailGrid article{padding:15px 2px;border-top:2px solid var(--ink)}.detailGrid h3{font:700 22px Georgia,serif;margin:4px 0 10px}.detailGrid p{font-size:14px}footer{border-top:1px solid var(--line);margin-top:37px;padding-top:16px;color:var(--muted);font-size:13px}
+@media(max-width:1180px){.matrixArea{grid-template-columns:1fr 1fr}}@media(max-width:900px){.columns,.matrixArea{display:block}.columns>.panel,.matrixArea>*{margin-bottom:13px}.metaphor{grid-template-columns:1fr 1fr}.metaphor article:last-child{grid-column:1/-1}}@media(max-width:620px){.site{padding:17px 15px 50px}.metaphor,.detailGrid{display:block}.metaphor article,.detailGrid article{margin-bottom:11px;min-height:auto}.lead{font-size:21px}.panel{padding:16px}.matrix{min-width:630px}}
+</style></head>
+<body><div class="site">
+<div class="top"><strong>BindOS / Щелкунчик II</strong><nav><a href="../nutcracker/">Первая версия</a><a href="../">Атлас</a><a href="../research/">Исследования</a><a href="https://ontoslive.github.io/Ontos.Times/wide/">ONTOS.TIMES</a></nav></div>
+<header class="hero">
+<div class="eyebrow">Независимая версия · Метафора и теория игр</div>
+<h1>Скорлупа не является орехом.</h1>
+<p class="lead">Когда что-то произошло, объяснение часто появляется раньше, чем мы успели рассмотреть само событие. И постепенно объяснение начинает выдавать себя за реальность. «Щелкунчик» нужен не для того, чтобы раздавить переживание. Он нужен, чтобы перестать путать переживание, событие и собственную версию происходящего.</p>
+<p class="quiet">Здесь нет обязательных чужих учебных сцен и нет правильного ответа про чужую жизнь. Можно принести свой материал, можно вообще ничего не вписывать. Ни одна версия, даже убедительная, не становится доказанным фактом только потому, что она сильно ощущается.</p>
+</header>
+<section aria-labelledby="metaphorTitle"><div class="heading"><h2 id="metaphorTitle">У каждого ореха своя скорлупа</h2><span class="eyebrow">Не урок · Оптика</span></div>
+<div class="metaphor">
+<article><span class="symbol" aria-hidden="true">◦</span><div class="eyebrow">Зерно</div><h3>Что меня задело?</h3><p>Слова, жест, отсутствие ответа, телесный отклик. Это то, с чего начинается исследование. Чувство действительно пережито, но ещё не объясняет мотивы других.</p></article>
+<article><span class="symbol" aria-hidden="true">◯</span><div class="eyebrow">Скорлупа</div><h3>Что я уже решил?</h3><p>Версия может быть правильной, ошибочной или частично верной. Опасна не версия, а момент, когда перестаёшь замечать, что это версия.</p></article>
+<article><span class="symbol" aria-hidden="true">⌁</span><div class="eyebrow">Трещина</div><h3>Что ещё возможно?</h3><p>Не оправдать другого и не предать собственный опыт. Найти хотя бы одно различие, после которого прежнее объяснение больше не захватывает весь мир.</p></article>
+</div></section>
+<div class="fold"></div>
+<section aria-labelledby="ownTitle"><div class="heading"><h2 id="ownTitle">Раскрой свой орех</h2><span class="eyebrow">Необязательная запись · только в браузере</span></div>
+<div class="columns">
+<div class="panel"><div class="eyebrow">Живой материал</div><h3>Тебе не нужно изобретать ситуацию</h3>
+<div class="worksheet">
+<label for="fact">Что произошло или что ты почувствовал?<textarea id="fact" placeholder="Событие, услышанная фраза или собственный отклик"></textarea><small>Если это ощущение, так и запиши: «я почувствовал». Это не делает его менее реальным.</small></label>
+<label for="story">Что я уже объяснил себе?<textarea id="story" placeholder="Первая версия, которая мгновенно пришла в голову"></textarea></label>
+<label for="gap">Какую часть объяснения я не наблюдал непосредственно?<textarea id="gap" placeholder="Мотив, обобщение, скрытое правило, предполагаемая причина"></textarea></label>
+<label for="alternative">Какая другая версия тоже совместима с наблюдением?<textarea id="alternative" placeholder="Альтернатива, которую не приходится придумывать против очевидных фактов"></textarea><small>Не требуется считать альтернативу истинной. Достаточно проверить, можно ли её вообще исключить.</small></label>
+<label for="test">Что могло бы изменить мой вывод?<textarea id="test" placeholder="Новый факт, прямое уточнение, повторное наблюдение"></textarea></label>
+</div><div class="controls"><button type="button" id="split">Развести слои</button><button type="button" id="copyOwn">Скопировать запись</button><button type="button" id="clearOwn">Очистить</button></div><p class="slight" id="ownStatus" role="status">Текст никуда не отправляется, не сохраняется на сервере и не анализируется языковой моделью.</p></div>
+<div class="panel"><div class="eyebrow">Зеркало различения</div><h3>Ничего не объявлять истиной заранее</h3><p class="quiet">Это не автоматический анализ. Здесь твои же слова будут разведены по различным статусам, чтобы не подменять свидетельство интерпретацией.</p><div id="splitResult" aria-live="polite"><div class="honesty"><h3>Пока скорлупа закрыта</h3><p>Ты можешь просто читать. Если захочешь, внеси свой материал слева и нажми «Развести слои».</p></div></div>
+<div class="honesty"><h3>Три предохранителя от собственной подтасовки</h3><p><strong>Не добавляй незамеченного.</strong> Предполагаемый мотив не становится наблюдением.</p><p><strong>Не изгоняй неудобную альтернативу.</strong> Самая благожелательная правдоподобная версия тоже имеет право быть рассмотренной.</p><p><strong>Не путай признание чувства с доказательством гипотезы.</strong> Твоя реакция реальна, даже если объяснение ещё предстоит исследовать.</p></div>
+</div></div></section>
+<div class="fold"></div>
+<section aria-labelledby="gameTitle"><div class="heading"><h2 id="gameTitle">Матрица игры: что меняется, если правила тоже становятся ходом?</h2><span class="eyebrow">Интерактивный эксперимент</span></div>
+<p class="matrixIntro">Теперь отвлечёмся от конкретных историй. В теории игр результат зависит не только от моего действия, но и от стратегии другой стороны. Эта матрица не угадывает чужие мотивы. Она показывает, как <strong>при наших предположениях</strong> меняются предпочтительные ходы и возможные устойчивые сочетания.</p>
+<p class="rulebox">Сначала мы выбираем внутри правил. Затем можем сделать сами правила предметом выбора. Но и вторая сторона имеет собственные возможные ходы.</p>
+<div class="matrixOptions"><label><input type="checkbox" id="anchorRow"> Показать третий ход: создавать независимую опору</label><button type="button" id="resetGame">Вернуть условную игру</button></div>
+<div class="tableWrap"><table class="matrix"><thead><tr><th scope="col">Мой ход ↓ / Ход другой стороны →</th><th scope="col">Обсуждает правила</th><th scope="col">Удерживает прежнюю рамку</th></tr></thead><tbody id="gameBody"></tbody></table></div>
+<div class="matrixArea">
+<div class="matrixEditor"><div class="eyebrow">Редактор выбранной клетки</div><h3 id="cellTitle">Мои действия и ответ другой стороны</h3><p class="quiet" id="cellExplanation"></p>
+<label for="myScore">Условная предпочтительность исхода для меня: <output id="myValue" for="myScore">0</output><input id="myScore" type="range" min="0" max="5" step="1"></label>
+<label for="theirScore">Предполагаемая предпочтительность исхода для другой стороны: <output id="theirValue" for="theirScore">0</output><input id="theirScore" type="range" min="0" max="5" step="1"></label>
+<p class="pairNote">Числа от 0 до 5 здесь не измеряют любовь, правоту или характер. Это выбранные тобой <strong>условные оценки</strong> исходов. Для реальной сцены без данных такие оценки являются только гипотезами.</p>
+<div class="controls"><button type="button" id="copyMatrix">Скопировать матрицу и предположения</button></div><p class="slight" id="matrixStatus" role="status"></p></div>
+<div class="matrixResult"><div class="eyebrow">Пересчёт стратегии</div><h3>Какие исходы устойчивы?</h3><p id="equilibriumText"></p><ul id="equilibria"></ul><p id="selectedExplanation"></p><p class="slight">Равновесие Нэша здесь означает лишь сочетание, где ни одной стороне не выгодно <em>односторонне</em> сменить ход при указанных числах. Оно не означает справедливость, согласие, безопасность или рекомендацию действовать именно так. В реальной жизни стратегии и информация часто устроены сложнее.</p></div>
+</div>
+</section>
+<div class="fold"></div>
+<section><div class="heading"><h2>Что именно мы получили?</h2></div>
+<div class="detailGrid"><article><div class="eyebrow">Первое различение</div><h3>Моя история ≠ событие</h3><p>Чувство может оставаться значимым, пока объяснение уточняется. Источник смысла не обязательно равен его первой интерпретации.</p></article>
+<article><div class="eyebrow">Второе</div><h3>Выбор ≠ структура выбора</h3><p>Поменять ход внутри правил и сделать сами правила предметом операции означает действовать на разных логических уровнях.</p></article>
+<article><div class="eyebrow">Третье</div><h3>Формула ≠ жизнь</h3><p>Игровая матрица позволяет проверять следствия из предположений, но не заменяет исследования наблюдений, ресурсов и реальных отношений.</p></article></div>
+<p><a href="../nutcracker/">Щелкунчик I: исходные шесть упражнений</a> · <a href="../research/nutcracker.html">Почему мы начали исследовать этот инструмент</a> · <a href="../research/paradox.html">Парадокс как ловушка или приглашение</a></p>
+</section>
+<footer>BindOS · «Щелкунчик II» · Отдельная версия, первая не изменена · Личные записи не передаются на сервер · CANON.md и ядро не менялись</footer>
+</div>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const slots=[["fact","Зерно · то, что наблюдалось или ощущалось"],["story","Скорлупа · моё первое объяснение"],["gap","Неустановленное · что я достроил"],["alternative","Альтернатива · что ещё возможно"],["test","Проверка · что изменит моё мнение"]];
+function writeOwn(){const region=$("splitResult");region.replaceChildren();let count=0;
+for(const [id,label] of slots){const v=$(id).value.trim();if(!v)continue;count++;const box=document.createElement("div");box.className="cardline";const h=document.createElement("strong");h.textContent=label;const p=document.createElement("p");p.textContent=v;box.append(h,p);region.append(box);}
+if(!count){const empty=document.createElement("p");empty.textContent="Нет записей. Можно начать с одной фразы: что именно произошло или было почувствовано?";region.append(empty);}
+$("ownStatus").textContent=count?"Разделено "+count+" из 5 слоёв. Формулировки остались твоими; система не объявляла их доказательствами.":"Запиши хотя бы одно наблюдение или переживание, если хочешь провести различение.";}
+$("split").addEventListener("click",writeOwn);
+$("clearOwn").addEventListener("click",()=>{slots.forEach(([id])=>$(id).value="");writeOwn();$("ownStatus").textContent="Записи очищены.";});
+$("copyOwn").addEventListener("click",async()=>{const value="Щелкунчик II · Карта различения\n\n"+slots.map(([id,label])=>label+"\n"+$(id).value.trim()).join("\n\n");
+try{await navigator.clipboard.writeText(value);$("ownStatus").textContent="Карта скопирована. Данные не отправлялись на сервер.";}catch(_){$("ownStatus").textContent="Браузер не разрешил копирование. Можно выделить текст вручную.";}});
+
+const rowNames=["Остаться внутри задачи","Поставить вопрос о правилах","Создать независимую опору"];
+const colNames=["Обсуждает правила","Удерживает прежнюю рамку"];
+const explanations=[
+["Один продолжает привычное действие, второй предлагает уточнять правила. Результат зависит от того, насколько обе стороны готовы менять условия.","Один продолжает прежний ход, другая сторона удерживает рамку. Противоречие может сохраняться даже при видимой стабильности."],
+["Один делает правила предметом разговора, другая сторона готова их обсуждать. Здесь возможна совместная перестройка условий.","Один ставит вопрос о правилах, другая сторона отказывается их пересматривать. Возможные издержки не исчезают от того, что метаход логически различим."],
+["Один создаёт дополнительные опоры, другая сторона обсуждает правила. Возникает больше возможных маршрутов.","Один создаёт дополнительные опоры при сопротивлении второй стороны. Это не обязательно разрыв, но прежняя зависимость может ослабнуть."]
+];
+const base=[[[3,2],[1,4]],[[4,3],[0,2]],[[4,3],[3,1]]];
+let scores=base.map(row=>row.map(x=>x.slice()));
+let selected={r:1,c:1};
+function rows(){return $("anchorRow").checked?3:2;}
+function isBestMe(r,c){const max=Math.max(...scores.slice(0,rows()).map(row=>row[c][0]));return scores[r][c][0]===max;}
+function isBestThem(r,c){return scores[r][c][1]===Math.max(...scores[r].map(cell=>cell[1]));}
+function equilibria(){const result=[];for(let r=0;r<rows();r++)for(let c=0;c<2;c++)if(isBestMe(r,c)&&isBestThem(r,c))result.push({r,c});return result;}
+function renderGame(){const body=$("gameBody");body.replaceChildren();
+for(let r=0;r<rows();r++){const tr=document.createElement("tr");const th=document.createElement("th");th.scope="row";th.textContent=rowNames[r];const sub=document.createElement("small");sub.textContent=r===0?"Ход внутри текущей задачи":r===1?"Операция над правилами":"Смена доступного поля возможностей";th.append(sub);tr.append(th);
+for(let c=0;c<2;c++){const td=document.createElement("td");const b=document.createElement("button");b.type="button";b.dataset.selected=String(selected.r===r&&selected.c===c);b.setAttribute("aria-pressed",b.dataset.selected);b.setAttribute("aria-label",rowNames[r]+" / "+colNames[c]+". Условные оценки: "+scores[r][c][0]+" и "+scores[r][c][1]+".");
+const txt=document.createElement("span");txt.textContent=rowNames[r]+" / "+colNames[c];txt.className="hint";
+const pair=document.createElement("span");pair.className="pair";pair.textContent=String(scores[r][c][0])+" : "+String(scores[r][c][1]);const eq=document.createElement("span");eq.className="eq";eq.textContent=isBestMe(r,c)&&isBestThem(r,c)?"Условное равновесие":isBestMe(r,c)?"Мой лучший ответ":isBestThem(r,c)?"Лучший ответ другой стороны":"";b.append(txt,pair,eq);b.addEventListener("click",()=>{selected={r,c};renderGame()});td.append(b);tr.append(td);}
+body.append(tr);}
+$("cellTitle").textContent=rowNames[selected.r]+" / "+colNames[selected.c];
+$("cellExplanation").textContent=explanations[selected.r][selected.c];
+$("myScore").value=String(scores[selected.r][selected.c][0]);$("theirScore").value=String(scores[selected.r][selected.c][1]);
+$("myValue").textContent=$("myScore").value;$("theirValue").textContent=$("theirScore").value;
+const eqs=equilibria();$("equilibria").replaceChildren();$("equilibriumText").textContent=eqs.length?"При этих оценках есть "+eqs.length+" устойчивых сочетания(й) чистых стратегий:":"При этих оценках устойчивых сочетаний чистых стратегий нет. Это не значит, что выход невозможен.";
+eqs.forEach(({r,c})=>{const li=document.createElement("li");li.textContent=rowNames[r]+" + "+colNames[c];$("equilibria").append(li);});
+$("selectedExplanation").textContent=isBestMe(selected.r,selected.c)&&isBestThem(selected.r,selected.c)?"Выбранная клетка сейчас устойчива к одностороннему изменению хода при заданных числах.":isBestMe(selected.r,selected.c)?"Для моего хода нет улучшения при этом столбце, но другая сторона может предпочесть свой другой столбец.":isBestThem(selected.r,selected.c)?"Другая сторона не улучшит исход сменой столбца, но мой иной ход может иметь большую условную оценку.":"Одна или обе стороны могут предпочесть другой ход при сохранении выбора другой стороны.";
+}
+$("anchorRow").addEventListener("change",()=>{if(selected.r===2&&!$("anchorRow").checked)selected={r:1,c:selected.c};renderGame()});
+function changeScore(player){scores[selected.r][selected.c][player]=Number($(player===0?"myScore":"theirScore").value);renderGame();}
+$("myScore").addEventListener("input",()=>changeScore(0));$("theirScore").addEventListener("input",()=>changeScore(1));
+$("resetGame").addEventListener("click",()=>{scores=base.map(row=>row.map(cell=>cell.slice()));$("anchorRow").checked=false;selected={r:1,c:1};renderGame();$("matrixStatus").textContent="Матрица возвращена к демонстрационным предположениям.";});
+$("copyMatrix").addEventListener("click",async()=>{let t="Щелкунчик II · Условная игровая матрица\nЧисла не установленные факты, а гипотетические оценки исходов.\n\n";for(let r=0;r<rows();r++)for(let c=0;c<2;c++)t+=rowNames[r]+" / "+colNames[c]+": "+scores[r][c][0]+" : "+scores[r][c][1]+"\n";t+="\nУсловные равновесия:\n"+equilibria().map(({r,c})=>rowNames[r]+" + "+colNames[c]).join("\n");
+try{await navigator.clipboard.writeText(t);$("matrixStatus").textContent="Условная матрица скопирована. Данные не отправлялись на сервер.";}catch(_){$("matrixStatus").textContent="Копирование недоступно. Оценки можно прочитать непосредственно в матрице.";}}
+);
+renderGame();
+</script>
+</body></html>
