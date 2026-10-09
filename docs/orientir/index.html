@@ -1,0 +1,80 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ориентир · BindOS</title>
+<style>
+:root{color-scheme:light dark;--line:color-mix(in srgb,CanvasText 25%,transparent);--soft:color-mix(in srgb,CanvasText 5%,Canvas)}
+*{box-sizing:border-box}body{background:Canvas;color:CanvasText;font:16px/1.58 system-ui,Arial,sans-serif;margin:0}.shell{max-width:1480px;margin:auto;padding:22px clamp(15px,3vw,49px) 75px}a{color:LinkText;text-underline-offset:3px}nav{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;border-bottom:1px solid var(--line);padding-bottom:15px;font-size:13px}nav div{display:flex;gap:18px;flex-wrap:wrap}.brand{font:700 26px Georgia,serif}header{padding:38px 0 22px}h1{font:700 clamp(50px,8vw,111px)/.96 Georgia,serif;letter-spacing:-.065em;margin:11px 0 19px}h2{font:700 clamp(27px,2.7vw,42px) Georgia,serif;letter-spacing:-.03em;margin:8px 0 16px}h3{font:700 22px Georgia,serif;margin:7px 0 13px}.eyebrow{font:750 11px system-ui;text-transform:uppercase;letter-spacing:.13em;color:GrayText}.lead{font:clamp(19px,1.6vw,25px)/1.46 Georgia,serif;max-width:950px}.muted{color:GrayText}.hint{color:GrayText;font-size:13px}
+section{border-top:1px solid var(--line);padding-top:22px;margin-top:30px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.panels{display:grid;grid-template-columns:1fr 1fr;gap:13px}.panel{border:1px solid var(--line);border-radius:8px;padding:19px;min-width:0}.panel label{display:block;font-weight:670}input,select,button{color:inherit;background:Canvas;border:1px solid var(--line);font:inherit;border-radius:6px}input[type=text],select{width:100%;min-height:44px;padding:9px 10px;margin-top:7px}button{cursor:pointer;padding:8px 12px}button:hover{background:var(--soft)}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid LinkText;outline-offset:3px}
+.rule{border:1px solid var(--line);border-radius:8px;padding:14px 17px;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(150px,.8fr) minmax(160px,.85fr);gap:13px;align-items:center;margin:10px 0}.rule label{font-size:13px;font-weight:600}.rule strong{font-size:17px}.rule small{color:GrayText;display:block}.tablewrap{overflow-x:auto}table{border-collapse:collapse;width:100%;table-layout:fixed}td,th{border:1px solid var(--line);text-align:center;padding:7px}td{height:104px}th{font-size:13px}td button{display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;width:100%;height:100%;min-height:87px;border:1px solid transparent;text-align:left}td button[aria-pressed=true]{background:var(--soft);border:2px solid CanvasText}td button strong{font-size:13px}td button span{font:700 14px ui-monospace,monospace}
+.reasons{padding-left:20px}.reasons li{margin-bottom:10px}.verdict{font:700 28px Georgia,serif}.soft{background:var(--soft);border-radius:6px;padding:17px}.buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}.snapshots li{margin:7px 0}.snapshots button{font-size:13px;padding:3px 8px;margin-left:10px}.three{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.three article{border-top:2px solid CanvasText;padding-top:13px}blockquote{font:23px/1.4 Georgia,serif;margin:24px 0;border-left:3px solid CanvasText;padding-left:19px}footer{border-top:1px solid var(--line);padding-top:13px;margin-top:40px;font-size:13px;color:GrayText}
+@media(max-width:1000px){.rule{grid-template-columns:1fr 1fr}.rule .desc{grid-column:1/-1}}
+@media(max-width:730px){.grid3,.panels,.three{display:block}.grid3>*,.panels>*,.three>*{margin-bottom:12px}}
+@media(max-width:440px){.shell{padding:17px 13px 60px}.panel{padding:13px}td button{padding:5px;min-height:90px}td button strong{font-size:12px}.rule{padding:12px}}
+</style></head><body><div class="shell">
+<nav><strong class="brand">BindOS / Ориентир</strong><div><a href="../">Атлас</a><a href="../nutcracker-editions/">Щелкунчик</a><a href="../research/">Исследования</a><a href="https://ontoslive.github.io/Ontos.Times/wide/">ONTOS.TIMES</a></div></nav>
+<header><div class="eyebrow">Открытая исследовательская поверхность · 0/1/?</div><h1>Ориентир.</h1><p class="lead">Не обязательно сразу принимать решение. Сначала нужно увидеть, где действительно проходит граница возможного, а где существует лишь наше предположение о ней.</p>
+<p>В партитуре есть предписанные ноты. В исследовании мы ещё выясняем правила. В проектировании можно менять некоторые условия. Это разные режимы, и ни один не превращает незнание в знание автоматически.</p><p class="hint">Никаких произвольно назначенных баллов. Ноль означает, что действие не выбрано; единица, что выбрано. Знак вопроса относится к достоверности правила, а не является третьим значением действия.</p></header>
+<section><div class="eyebrow">01 · Оси</div><h2>Как называется то, что происходит?</h2><div class="grid3">
+<div class="panel"><label for="A">A · Первое действие</label><input id="A" type="text" maxlength="95" value="Действовать самостоятельно"><p class="hint">A = 1: это действие выбрано.</p></div>
+<div class="panel"><label for="B">B · Второе действие</label><input id="B" type="text" maxlength="95" value="Предварительно согласовать"><p class="hint">A и B не обязаны быть противоположностями.</p></div>
+<div class="panel"><label for="C">C · Состояние рамки</label><input id="C" type="text" maxlength="95" value="Условия уже изменены"><p class="hint">C = 1: правила действительно изменились, а не только были оспорены.</p></div>
+</div></section>
+<section><div class="eyebrow">02 · Ограничения</div><h2>Какое правило действует, а какое мы додумали?</h2>
+<p>Ниже три редактируемых условия. Статус «подтверждено» означает, что <em>ты считаешь его подтверждённым</em>. BindOS не проверяет внешние свидетельства.</p>
+<div class="rule"><div class="desc"><strong>R₁ · A требует B</strong><small>Если A = 1, то B = 1 обязательно</small></div><div><label for="m0">Статус</label><select id="m0"><option value="known" selected>Считаю подтверждённым</option><option value="hyp">Предположение</option><option value="off">Не действует в модели</option></select></div><div><label for="s0">Область действия</label><select id="s0"><option value="all">При любом C</option><option value="c0" selected>Только C = 0</option><option value="c1">Только C = 1</option></select></div></div>
+<div class="rule"><div class="desc"><strong>R₂ · A исключает B</strong><small>Нельзя одновременно выбрать A = 1 и B = 1</small></div><div><label for="m1">Статус</label><select id="m1"><option value="known">Считаю подтверждённым</option><option value="hyp" selected>Предположение</option><option value="off">Не действует в модели</option></select></div><div><label for="s1">Область действия</label><select id="s1"><option value="all">При любом C</option><option value="c0" selected>Только C = 0</option><option value="c1">Только C = 1</option></select></div></div>
+<div class="rule"><div class="desc"><strong>R₃ · B требует A</strong><small>Если B = 1, то A = 1 обязательно</small></div><div><label for="m2">Статус</label><select id="m2"><option value="known">Считаю подтверждённым</option><option value="hyp">Предположение</option><option value="off" selected>Не действует в модели</option></select></div><div><label for="s2">Область действия</label><select id="s2"><option value="all" selected>При любом C</option><option value="c0">Только C = 0</option><option value="c1">Только C = 1</option></select></div></div>
+</section>
+<section><div class="eyebrow">03 · Поле сочетаний</div><h2>Восемь клеток, две рамки</h2><p>Выбери любую клетку. В одной плоскости C = 0, в другой C = 1. Это полное пространство <em>трёх введённых осей</em>, но не всех возможностей жизни.</p>
+<div class="panels"><div class="panel"><div class="eyebrow">C = 0</div><h3 id="title0">Рамка прежняя</h3><div class="tablewrap"><table><thead><tr><th>A ↓ / B →</th><th>B = 0</th><th>B = 1</th></tr></thead><tbody id="body0"></tbody></table></div><p class="hint" id="count0"></p></div>
+<div class="panel"><div class="eyebrow">C = 1</div><h3 id="title1">Рамка изменилась</h3><div class="tablewrap"><table><thead><tr><th>A ↓ / B →</th><th>B = 0</th><th>B = 1</th></tr></thead><tbody id="body1"></tbody></table></div><p class="hint" id="count1"></p></div></div>
+<div class="panels" style="margin-top:14px"><div class="panel"><div class="eyebrow">Текущая конфигурация</div><h3 id="selection"></h3><p class="hint" id="description"></p><p class="verdict" id="verdict"></p><ol id="reasons" class="reasons"></ol></div>
+<div class="panel"><div class="eyebrow">Метакомментарий</div><h3>Что следует из заданного?</h3><p id="meaning"></p><div class="soft"><strong>Незнание не равно нулю.</strong><p>Если правило лишь предполагается, нарушение остаётся под вопросом. А отсутствие запрета в этой таблице не доказывает, что в мире отсутствуют другие ограничения.</p></div></div></div>
+<div class="buttons"><button id="reset" type="button">Вернуть исходный пример</button><button id="save" type="button">Сохранить вариант в этой вкладке</button><button id="copy" type="button">Скопировать описание</button></div>
+<div class="snapshots"><p class="hint">Сохранённые варианты существуют только в этой вкладке и исчезнут после обновления. Текст можно скопировать.</p><ul id="snapshots"></ul></div><p id="message" class="hint" role="status"></p></section>
+<section><div class="eyebrow">04 · Чтение карты</div><h2>Исполнение, исследование, создание условий</h2><div class="three"><article><h3>Партитура</h3><p>Если правила подтверждены и приняты, задача может требовать точного исполнения. Это не деградация и не поражение.</p></article><article><h3>Незнание</h3><p>Если мы ещё не знаем, действует ли правило, не нужно назначать ответ ради красивой схемы. Неизвестное остаётся неизвестным.</p></article><article><h3>Другая рамка</h3><p>Некоторые ограничения можно пересмотреть. Но C = 1 означает состоявшееся изменение, а не просто просьбу его разрешить.</p></article></div>
+<blockquote>Ориентироваться означает знать не только доступные ходы, но и границы собственной карты.</blockquote></section>
+<footer>BindOS · «Ориентир» · Отдельный опыт, не новая редакция канона · Данные не передаются на сервер. Условные ограничения не доказывают факты о людях.</footer></div>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const ruleFns=[(a,b)=>a===1&&b===0,(a,b)=>a===1&&b===1,(a,b)=>b===1&&a===0];
+const ruleNames=["R₁: A требует B","R₂: A исключает B","R₃: B требует A"];
+const initialRules=[{mode:"known",scope:"c0"},{mode:"hyp",scope:"c0"},{mode:"off",scope:"all"}];
+let chosen={a:1,b:0,c:0},snap=[];
+const inputIds=["A","B","C","m0","s0","m1","s1","m2","s2"];
+const textNames=()=>["A","B","C"].map(id=>$(id).value.trim()||id);
+const ruleAt=i=>({mode:$("m"+i).value,scope:$("s"+i).value});
+const inScope=(scope,c)=>scope==="all"||(scope==="c0"&&c===0)||(scope==="c1"&&c===1);
+function evaluate(a,b,c){const confirmed=[],hypothetical=[];
+for(let i=0;i<3;i++){const rule=ruleAt(i);if(rule.mode==="off"||!inScope(rule.scope,c)||!ruleFns[i](a,b))continue;(rule.mode==="known"?confirmed:hypothetical).push(ruleNames[i]);}
+return{confirmed,hypothetical,kind:confirmed.length?"blocked":hypothetical.length?"unknown":"possible"};}
+const stateName=k=>k==="blocked"?"Исключено":k==="unknown"?"Под вопросом":"Не исключено";
+function plane(c){const body=$("body"+c);body.replaceChildren();const count={blocked:0,unknown:0,possible:0};
+for(let a=0;a<2;a++){const row=document.createElement("tr"),head=document.createElement("th");head.scope="row";head.textContent="A = "+a;row.append(head);
+for(let b=0;b<2;b++){const result=evaluate(a,b,c);count[result.kind]++;const td=document.createElement("td"),button=document.createElement("button");button.type="button";
+button.setAttribute("aria-pressed",String(chosen.a===a&&chosen.b===b&&chosen.c===c));button.setAttribute("aria-label","A "+a+" B "+b+" C "+c+" "+stateName(result.kind));
+const bit=document.createElement("span");bit.textContent="A"+a+" · B"+b;const status=document.createElement("strong");status.textContent=stateName(result.kind);const symbol=document.createElement("small");symbol.textContent=result.kind==="blocked"?"×":result.kind==="unknown"?"?":"○";
+button.append(bit,status,symbol);button.addEventListener("click",()=>{chosen={a,b,c};render()});td.append(button);row.append(td);}body.append(row);}
+$("count"+c).textContent="Исключено: "+count.blocked+" · неизвестно: "+count.unknown+" · не исключено: "+count.possible;
+$("title"+c).textContent=textNames()[2]+" = "+c;
+}
+function detail(){const {a,b,c}=chosen,result=evaluate(a,b,c),names=textNames();$("selection").textContent="A = "+a+" · B = "+b+" · C = "+c;
+$("description").textContent=names[0]+": "+(a?"выбрано":"не выбрано")+"; "+names[1]+": "+(b?"выбрано":"не выбрано")+"; "+names[2]+": "+(c?"да":"нет")+".";
+$("verdict").textContent=stateName(result.kind);
+const reasons=$("reasons");reasons.replaceChildren();const lines=[];
+if(result.confirmed.length)lines.push("Нарушаются правила, которые ты отметил как подтверждённые: "+result.confirmed.join(", ")+".");
+if(result.hypothetical.length)lines.push("Нарушаются правила, которые ты пока предполагаешь: "+result.hypothetical.join(", ")+".");
+if(!lines.length)lines.push("Ни одно из заданных правил не исключает такую комбинацию.");
+lines.forEach(line=>{const li=document.createElement("li");li.textContent=line;reasons.append(li)});
+$("meaning").textContent=result.kind==="blocked"?"Внутри принятой модели этот ход запрещён. Истинность исходных правил в реальной ситуации ещё требует отдельной проверки.":result.kind==="unknown"?"Вывод зависит от неустановленного правила. Не превращай предположение в факт и не объявляй его ложным без основания.":"Здесь нет запрета со стороны заданных правил. Это не доказывает практическую возможность: на карте могут отсутствовать другие ограничения.";
+}
+function render(){plane(0);plane(1);detail();}
+function capture(){return{names:textNames(),rules:initialRules.map((_,i)=>ruleAt(i)),chosen:{...chosen}};}
+function restore(s){["A","B","C"].forEach((id,i)=>$(id).value=s.names[i]);s.rules.forEach((r,i)=>{$("m"+i).value=r.mode;$("s"+i).value=r.scope});chosen={...s.chosen};render();}
+function reset(){restore({names:["Действовать самостоятельно","Предварительно согласовать","Условия уже изменены"],rules:initialRules,chosen:{a:1,b:0,c:0}});$("message").textContent="Исходная демонстрационная модель восстановлена.";}
+inputIds.forEach(id=>$(id).addEventListener("input",render));
+$("reset").addEventListener("click",reset);
+function drawSnapshots(){const list=$("snapshots");list.replaceChildren();snap.forEach((s,i)=>{const li=document.createElement("li");li.append(document.createTextNode("Вариант "+(i+1)+" · "+s.names[0]));const button=document.createElement("button");button.type="button";button.textContent="Вернуть";button.addEventListener("click",()=>{restore(s);$("message").textContent="Вариант восстановлен.";});li.append(button);list.append(li)});}
+$("save").addEventListener("click",()=>{snap.push(JSON.parse(JSON.stringify(capture())));if(snap.length>12)snap.shift();drawSnapshots();$("message").textContent="Сохранено только в этой вкладке.";});
+$("copy").addEventListener("click",async()=>{try{await navigator.clipboard.writeText("BindOS / Ориентир\n"+JSON.stringify(capture(),null,2));$("message").textContent="Модель скопирована."; }catch(e){$("message").textContent="Браузер запретил копирование."; }});
+reset();
+</script></body></html>
