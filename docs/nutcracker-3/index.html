@@ -1,0 +1,102 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Щелкунчик III · Две игры и сцепление · BindOS</title>
+<meta name="description" content="Три исследовательские матрицы: внутренняя игра, внешняя игра и композиция их выигрышей.">
+<style>
+:root{color-scheme:light dark;--rule:color-mix(in srgb,CanvasText 24%,transparent);--tint:color-mix(in srgb,CanvasText 5%,Canvas);--mark:color-mix(in srgb,CanvasText 13%,Canvas)}
+*{box-sizing:border-box}body{background:Canvas;color:CanvasText;margin:0;font:16px/1.57 system-ui,"Segoe UI",Arial,sans-serif}
+a{color:LinkText;text-underline-offset:3px}.site{max-width:1640px;margin:auto;padding:23px clamp(17px,3vw,48px) 90px}
+header nav{border-bottom:1px solid var(--rule);display:flex;flex-wrap:wrap;gap:17px;padding:0 0 17px;font-size:13px}header h1{font:700 clamp(47px,7.5vw,108px)/.98 Georgia,serif;letter-spacing:-.06em;margin:26px 0 13px}.lead{font:clamp(19px,1.7vw,26px)/1.4 Georgia,serif;max-width:1100px;margin-bottom:15px}
+.kicker{font-weight:750;font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:GrayText}
+h2{font:700 clamp(25px,2.4vw,40px)/1.13 Georgia,serif;margin:11px 0 16px}h3{font:700 23px/1.2 Georgia,serif;margin:12px 0}p{line-height:1.65}section{margin-top:39px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.paper{border:1px solid var(--rule);border-radius:8px;padding:20px;min-width:0}.paper strong{font-weight:750}.muted{color:GrayText}.small{font-size:13px}
+table{border-collapse:collapse;width:100%;table-layout:fixed}td,th{text-align:center;border:1px solid var(--rule);padding:11px 6px;font-variant-numeric:tabular-nums}th{font-size:13px;line-height:1.4;background:var(--tint)}th[scope=row]{text-align:left}td{font:700 22px Georgia,serif}td small{display:block;font:12px system-ui;color:GrayText}
+label{cursor:pointer}input[type=checkbox]{width:17px;height:17px;vertical-align:middle;margin-right:8px}
+input[type=range]{width:min(430px,100%);vertical-align:middle}button{border:1px solid var(--rule);background:Canvas;color:CanvasText;border-radius:7px;font:inherit;padding:9px 12px;cursor:pointer}button:hover{background:var(--tint)}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid LinkText;outline-offset:3px}
+.controls{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;border-top:1px solid var(--rule);padding-top:14px;margin-top:17px}.formula{border-left:3px solid CanvasText;padding:9px 16px;font:22px/1.45 Georgia,serif;margin:19px 0}
+.caption{margin-top:10px;font-size:13px;color:GrayText}.composer{display:grid;grid-template-columns:1fr 1fr;gap:14px}.callout{padding:17px;background:var(--tint);border-radius:7px}.callout p{margin:8px 0}
+.matrixWrap{overflow:auto;border:1px solid var(--rule);border-radius:7px}.combined{min-width:800px}.combined th{width:20%}.combined th.corner{width:20%}.combined td{padding:6px;line-height:1.2}.combined td button{display:block;width:100%;height:100%;min-height:72px;border-color:transparent;text-align:center;font:700 23px Georgia,serif}.combined td button[data-nash=true]{background:var(--mark);border-color:CanvasText}.combined td button[data-selected=true]{outline:2px solid LinkText;outline-offset:-2px}.combined td button small{display:block;font:11px system-ui;color:GrayText}.outcome{display:grid;grid-template-columns:minmax(220px,1fr) minmax(220px,1.3fr);gap:14px;margin-top:14px}
+.current{background:var(--tint);border-radius:7px;padding:18px}.current .pair{font:700 43px Georgia,serif;margin:8px 0}.current small{color:GrayText}.equilibria{font-size:14px}.equilibria li{margin:8px 0}
+p.note{font-size:14px;color:GrayText}.links{display:flex;flex-wrap:wrap;gap:14px;margin-top:25px}footer{border-top:1px solid var(--rule);margin-top:42px;padding-top:15px;font-size:13px;color:GrayText}
+@media(max-width:950px){.two,.composer,.outcome{grid-template-columns:1fr}}@media(max-width:550px){.paper{padding:14px}header h1{font-size:clamp(42px,11vw,74px)}}
+</style></head><body><div class="site"><header><nav><a href="../nutcracker-editions/">Версии «Щелкунчика»</a><a href="../nutcracker-2/">Матрица II</a><a href="../research/">Исследования</a><a href="../">Атлас</a><a href="https://ontoslive.github.io/Ontos.Times/wide/">ONTOS.TIMES</a></nav><div class="kicker" style="margin-top:26px">BindOS · Эксперимент 03 · Композиция игр</div><h1>Две игры. Третья их связывает.</h1><p class="lead">Можно добиться внешнего согласия и внутренне потерять опору. А можно получить внешнее «нет», но перестать считать чужое разрешение условием собственного выбора. Поэтому одна матрица действий не описывает всю сцену.</p>
+<p>Ниже две самостоятельные игры. Третья возникает, когда мы связываем их стратегии и выигрыши. Двигая силу связи, можно увидеть, в какой момент расчёт каждой игры по отдельности перестаёт описывать результат обеих.</p></header>
+<section><div class="two">
+<div class="paper"><div class="kicker">Игра I · Внутренний контур</div><h2>В каком положении я действую?</h2><p class="small muted">Условные установки сторон относительно права на собственное решение. Мы не знаем их намерений, лишь сравниваем модели.</p><table><thead><tr><th>Моя позиция ↓</th><th>Признать автономию</th><th>Удержать право определять</th></tr></thead><tbody id="innerBody"></tbody></table>
+<div class="controls"><label><input id="innerZero" type="checkbox">Нулевая сумма</label><span class="small muted" id="innerMode">Возможен общий выигрыш</span></div>
+</div>
+<div class="paper"><div class="kicker">Игра II · Внешний контур</div><h2>Что стороны делают?</h2><p class="small muted">Наблюдаемые действия. Даже если две стороны выбрали разные ходы, внутренние оценки могут отличаться от внешнего результата.</p><table><thead><tr><th>Моё действие ↓</th><th>Обсудить условия</th><th>Удержать рамку</th></tr></thead><tbody id="outerBody"></tbody></table>
+<div class="controls"><label><input id="outerZero" type="checkbox">Нулевая сумма</label><span class="small muted" id="outerMode">Возможен общий выигрыш</span></div>
+</div></div>
+<p class="caption">В каждой клетке сначала условная оценка для меня, затем для другой стороны. В нулевой сумме второе число становится противоположным первому. Это свойство <em>модели выигрышей</em>, а не моральная характеристика отношений.</p>
+</section>
+<section><div class="kicker">Игра III · Наложение</div><h2>Как внутренняя позиция меняет цену внешнего хода?</h2>
+<div class="composer"><div class="paper"><label for="coupling"><strong>Сила сцепления:</strong> <output id="couplingValue" for="coupling">0</output></label><p><input type="range" min="0" max="3" step="1" id="coupling" value="0"></p>
+<p id="couplingDescription"></p><div class="controls"><button type="button" id="reset">Вернуть исходные предположения</button></div></div>
+<div class="callout"><div class="kicker">Точное различение</div><p><strong>При нулевом сцеплении</strong> функции выигрыша складываются, а независимые выборы стратегий можно анализировать по отдельности.</p><p><strong>При ненулевом</strong> внутренний выбор меняет оценку внешнего и наоборот. Тогда отдельные оптимумы не обязаны образовать оптимум совместной игры.</p></div></div>
+<div class="formula">Совместный выигрыш = выигрыш внутренней игры + выигрыш внешней игры + сила сцепления × влияние их сочетания.</div>
+</section>
+<section><div class="kicker">Совместное поле · Четыре стратегии против четырёх</div><h2>Матрица, которая собирается из двух других</h2><p>Каждая сторона выбирает <strong>пару</strong>: внутреннюю позицию и внешний ход. Поэтому при двух вариантах на каждом уровне у каждой стороны четыре составные стратегии. Всего шестнадцать клеток, а не одна магическая «таблица смыслов».</p>
+<div class="matrixWrap"><table class="combined"><thead><tr><th class="corner">Моя пара ↓ / Пара другой стороны →</th><th>Автономия + обсуждение</th><th>Автономия + прежняя рамка</th><th>Контроль + обсуждение</th><th>Контроль + прежняя рамка</th></tr></thead><tbody id="combinedBody"></tbody></table></div>
+<div class="outcome">
+<div class="current"><div class="kicker">Выбранная клетка</div><h3 id="choiceTitle">Выбери комбинацию</h3><div class="pair" id="choicePayoff"></div><p id="choiceDescription" class="small"></p><small>Первое число принадлежит модели моего выигрыша, второе другой стороне.</small></div>
+<div class="paper"><div class="kicker">Устойчивые сочетания чистых стратегий</div><h3>Что выдерживает односторонний пересмотр?</h3><p id="equilibriumIntro" class="small"></p><ul id="equilibriumList" class="equilibria"></ul><p class="note">Здесь вычисляется равновесие Нэша только в заданной условной игре. Оно не означает желательность, справедливость или безопасность. Когда равновесий нет, это не доказательство невозможности решения: могут существовать смешанные стратегии.</p></div>
+</div></section>
+<section><div class="two">
+<article class="paper"><div class="kicker">Внимание · Экономика · Отношения</div><h2>Когда это действительно полезно?</h2><p>Если человек внутренне продолжает играть за одобрение, внешний успех может укреплять зависимость. При иной внутренней позиции тот же внешний исход может перестать быть катастрофой. Третья матрица позволяет явно задать, <em>какие именно отношения связывают эти исходы</em>.</p></article>
+<article class="paper"><div class="kicker">Исследовательский предел</div><h2>Мы не угадываем людей</h2><p>Набор чисел и связи сейчас демонстрационные. Применение к реальным отношениям требует наблюдений, добровольного уточнения условий, определения полезности и проверки предположений. Внутренние установки другой стороны не являются непосредственно наблюдаемыми данными.</p></article>
+</div><div class="links"><a href="../nutcracker-2/">Предыдущая матрица</a><a href="../research/paradox.html">Парадокс как ловушка или приглашение</a><a href="../research/support.html">Поднимись, не уходи</a></div></section>
+<footer>BindOS · Щелкунчик III · Экспериментальная трёхконтурная модель · Никаких изменений канона · Никаких обращений к серверу или личным данным</footer></div>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const labelsA=[["Искать одобрения","Держать свою опору"],["Исполнять задачу","Обсуждать правила"]];
+const labelsB=[["Признавать автономию","Определять допустимое"],["Обсуждать","Удерживать рамку"]];
+const baseInner=[[[2,2],[0,3]],[[3,2],[2,1]]];
+const baseOuter=[[[3,3],[1,4]],[[4,3],[0,2]]];
+function pay(base,zero,r,c){const a=base[r][c][0],b=base[r][c][1];return zero?[a,-a]:[a,b]}
+function inner(a,b){return pay(baseInner,$("innerZero").checked,a,b)}
+function outer(a,b){return pay(baseOuter,$("outerZero").checked,a,b)}
+function linkValue(a,b){
+const [iA,eA]=a,[iB,eB]=b;
+const mine=(iA===0&&eA===1?-2:0)+(iA===1&&eA===1?1:0)+(iB===1&&eB===1?-1:0);
+const theirs=(iB===1&&eB===0?1:0)+(iB===0&&eB===0?1:0)+(iB===1&&iA===1?-1:0);
+return [mine,theirs];
+}
+const paths=[[0,0],[0,1],[1,0],[1,1]];
+const labelA=a=>labelsA[0][a[0]]+" / "+labelsA[1][a[1]];
+const labelB=b=>labelsB[0][b[0]]+" / "+labelsB[1][b[1]];
+const lambda=()=>Number($("coupling").value);
+function combined(r,c){
+const a=paths[r],b=paths[c],x=inner(a[0],b[0]),y=outer(a[1],b[1]),z=linkValue(a,b),l=lambda();
+return [x[0]+y[0]+l*z[0],x[1]+y[1]+l*z[1]];
+}
+function eq(r,c){
+const p=combined(r,c);return paths.every((_,i)=>combined(i,c)[0]<=p[0])&&paths.every((_,j)=>combined(r,j)[1]<=p[1]);
+}
+let selected=[1,3];
+function tableTo(id,kind){
+const body=$(id);body.replaceChildren();
+const A=labelsA[kind==="inner"?0:1];const fn=kind==="inner"?inner:outer;
+for(let r=0;r<2;r++){const tr=document.createElement("tr"),th=document.createElement("th");th.scope="row";th.textContent=A[r];tr.append(th);
+for(let c=0;c<2;c++){const td=document.createElement("td"),p=fn(r,c);td.textContent=p[0]+" : "+p[1];tr.append(td)}body.append(tr)}
+}
+function render(){
+tableTo("innerBody","inner");tableTo("outerBody","outer");
+$("innerMode").textContent=$("innerZero").checked?"Выигрыши противоположны":"Возможен общий выигрыш";
+$("outerMode").textContent=$("outerZero").checked?"Выигрыши противоположны":"Возможен общий выигрыш";
+$("couplingValue").textContent=String(lambda());
+$("couplingDescription").textContent=lambda()===0?"Контуры сейчас складываются без взаимной поправки.":"Сцепление меняет выигрыши некоторых пар внутренней позиции и внешнего действия. Поправка задана как пример, а не обнаружена в чьей-то жизни.";
+const body=$("combinedBody");body.replaceChildren();const solutions=[];
+for(let r=0;r<4;r++){const tr=document.createElement("tr"),th=document.createElement("th");th.scope="row";th.textContent=labelA(paths[r]);tr.append(th);
+for(let c=0;c<4;c++){const td=document.createElement("td"),btn=document.createElement("button"),p=combined(r,c),stable=eq(r,c);btn.type="button";btn.dataset.nash=String(stable);btn.dataset.selected=String(selected[0]===r&&selected[1]===c);btn.setAttribute("aria-label",labelA(paths[r])+" против "+labelB(paths[c])+". Выигрыши "+p[0]+" и "+p[1]+(stable?". Равновесие":""));
+btn.textContent=p[0]+" : "+p[1];const little=document.createElement("small");little.textContent=stable?"Равновесие":"";btn.append(little);btn.addEventListener("click",()=>{selected=[r,c];render()});td.append(btn);tr.append(td);if(stable)solutions.push([r,c]);}body.append(tr);}
+$("choiceTitle").textContent=labelA(paths[selected[0]])+" × "+labelB(paths[selected[1]]);$("choicePayoff").textContent=combined(...selected).join(" : ");
+const cross=linkValue(paths[selected[0]],paths[selected[1]]);
+$("choiceDescription").textContent="Взаимная поправка при текущей силе сцепления: "+(lambda()*cross[0])+" для меня, "+(lambda()*cross[1])+" для другой стороны. Это условные показатели.";
+$("equilibriumIntro").textContent=solutions.length?"Обнаружено "+solutions.length+" сочетаний, в которых никто не улучшит свой выигрыш односторонней заменой всей пары ходов.":"Равновесий в чистых стратегиях нет при нынешних предположениях.";
+$("equilibriumList").replaceChildren();for(const [r,c] of solutions){const li=document.createElement("li");li.textContent=labelA(paths[r])+" + "+labelB(paths[c]);$("equilibriumList").append(li);}
+}
+["innerZero","outerZero","coupling"].forEach(id=>$(id).addEventListener("input",render));
+$("reset").addEventListener("click",()=>{$("innerZero").checked=false;$("outerZero").checked=false;$("coupling").value="0";selected=[1,3];render()});
+render();
+</script></body></html>
